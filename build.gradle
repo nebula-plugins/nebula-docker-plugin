@@ -18,14 +18,12 @@
 plugins {
     id 'com.gradle.plugin-publish' version '0.9.5'
     id 'nebula.plugin-plugin' version '4.24.0'
-    id 'nebula.kotlin' version '1.0.3'
 }
 
-apply plugin: 'kotlin'
+apply plugin: 'groovy'
 
 dependencies {
-    compile 'org.jetbrains.kotlin:kotlin-reflect:1.0.3'
-    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4'
+    compile group: 'com.bmuschko', name: 'gradle-docker-plugin', version: "$dockerVersion"
 }
 
 facets {
@@ -35,20 +33,12 @@ facets {
     }
 }
 
-description 'Gradle resolution rules plugin'
+description 'Gradle Docker Package Plugin'
 
 contacts {
-    'dmthomas@gmail.com' {
-        moniker 'Danny Thomas'
-        github 'DanielThomas'
-    }
-    'nadavcoh@gmail.com' {
-        moniker 'Nadav Cohen'
-        github 'nadavc'
-    }
-    'rob.spieldenner@gmail.com' {
-        moniker 'Rob Spieldenner'
-        github 'rspieldenner'
+    'me@liviutudor.com' {
+        moniker 'Liviu Tudor'
+        github 'liviutudor'
     }
 }
 

@@ -15,7 +15,7 @@
  *
  */
 
-package nebula.plugin.resolutionrules
+package nebula.plugin.docker
 
 import spock.lang.Specification
 
