@@ -1,0 +1,66 @@
+/*
+ * Copyright 2015 Netflix, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+plugins {
+    id 'com.gradle.plugin-publish' version '0.9.5'
+    id 'nebula.plugin-plugin' version '4.24.0'
+    id 'nebula.kotlin' version '1.0.3'
+}
+
+apply plugin: 'kotlin'
+
+dependencies {
+    compile 'org.jetbrains.kotlin:kotlin-reflect:1.0.3'
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.7.4'
+}
+
+facets {
+    functionalTest {
+        parentSourceSet = 'test'
+        testTaskName = 'functionalTest'
+    }
+}
+
+apply from: 'gradle/idea.gradle'
+
+description 'Gradle resolution rules plugin'
+
+contacts {
+    'dmthomas@gmail.com' {
+        moniker 'Danny Thomas'
+        github 'DanielThomas'
+    }
+    'nadavcoh@gmail.com' {
+        moniker 'Nadav Cohen'
+        github 'nadavc'
+    }
+    'rob.spieldenner@gmail.com' {
+        moniker 'Rob Spieldenner'
+        github 'rspieldenner'
+    }
+}
+
+pluginBundle {
+    plugins {
+        resolutionRules {
+            id = 'nebula.resolution-rules'
+            displayName = 'Gradle Resolution Rules plugin'
+            description = project.description
+            tags = ['nebula', 'resolve', 'resolution', 'rules']
+        }
+    }
+}
