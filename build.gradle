@@ -35,8 +35,6 @@ facets {
     }
 }
 
-apply from: 'gradle/idea.gradle'
-
 description 'Gradle resolution rules plugin'
 
 contacts {
@@ -57,10 +55,10 @@ contacts {
 pluginBundle {
     plugins {
         resolutionRules {
-            id = 'nebula.resolution-rules'
-            displayName = 'Gradle Resolution Rules plugin'
+            id = 'nebula.docker'
+            displayName = 'Gradle Docker Package Plugin'
             description = project.description
-            tags = ['nebula', 'resolve', 'resolution', 'rules']
+            tags = ['nebula', 'docker']
         }
     }
 }
