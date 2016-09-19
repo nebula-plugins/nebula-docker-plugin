@@ -9,7 +9,7 @@ import org.gradle.api.Plugin
 
 class NebulaDockerExtension {
     // main ones
-    def String maintainerEmail = "ltudor@netflix.com"
+    def String maintainerEmail
     def Map<String, String> dockerRepo
     def String dockerUrl
     def String dockerBase
@@ -40,28 +40,28 @@ class NebulaDockerPlugin implements Plugin<Project> {
 
     final String DEF_DOCKER_FILE = "./build/docker/Dockerfile"
 
-    private void assignDefaults(Project project, NebulaDockerExtension daDockerExt) {
-        if (!daDockerExt.dockerUrl) {
-            daDockerExt.dockerUrl = DOCKER_URL_LOCALHOST
+    private void assignDefaults(Project project, NebulaDockerExtension nebulaDockerExtension) {
+        if (!nebulaDockerExtension.dockerUrl) {
+            nebulaDockerExtension.dockerUrl = DOCKER_URL_LOCALHOST
         }
 
-        if (!daDockerExt.dockerBase) {
-            daDockerExt.dockerBase = DOCKER_BASE_OPEN_JRE
+        if (!nebulaDockerExtension.dockerBase) {
+            nebulaDockerExtension.dockerBase = DOCKER_BASE_OPEN_JRE
         }
-        if (!daDockerExt.dockerFile) {
-            daDockerExt.dockerFile = DEF_DOCKER_FILE
+        if (!nebulaDockerExtension.dockerFile) {
+            nebulaDockerExtension.dockerFile = DEF_DOCKER_FILE
         }
-        if (!daDockerExt.dockerRepo) {
+        if (!nebulaDockerExtension.dockerRepo) {
             def groupAppName = "${project.group}/${project.applicationName}"
-            daDockerExt.dockerRepo = [test: TITAN_TEST + "/$groupAppName", prod: TITAN_PROD + "/$groupAppName"]
+            nebulaDockerExtension.dockerRepo = [test: TITAN_TEST + "/$groupAppName", prod: TITAN_PROD + "/$groupAppName"]
         }
-        if (!project.daDocker.appDirLatest) {
-            project.daDocker.appDirLatest = "/${project.applicationName}-latest"
+        if (!project.nebulaDockerExtension.appDirLatest) {
+            project.nebulaDockerExtension.appDirLatest = "/${project.applicationName}-latest"
         }
     }
 
     private void createTasks(Project project, String envir) {
-        NebulaDockerExtension daDocker = project.daDocker
+        NebulaDockerExtension nebulaDocker = project.nebulaDocker
 
         for (def tags in ["", "Latest"]) {
             project.tasks.create(name: "dockerTagImage${envir}${tags}", type: DockerTagImage) {
@@ -71,7 +71,7 @@ class NebulaDockerPlugin implements Plugin<Project> {
                     dependsOn project.tasks["pushImage${envir}"]
                 }
                 targetImageId { project.buildImage.imageId }
-                repository = daDocker.dockerRepo[envir.toLowerCase()]
+                repository = nebulaDocker.dockerRepo[envir.toLowerCase()]
                 if (tags == "") {
                     conventionMapping.tag = { "${-> project.version}".toString() }
                 } else {
@@ -89,22 +89,16 @@ class NebulaDockerPlugin implements Plugin<Project> {
     }
 
     private void createAllTasks(Project project) {
-        project.tasks.create(name: 'testingDaDockerPlugin') << {
-            println "*************************************************"
-            println "* DADockerPlugin.testingDaDockerPlugin executed *"
-            println "*************************************************"
-        }
-
         project.tasks.create(name: 'createDockerfile', type: Dockerfile) {
-            destFile = project.file(project.daDocker.dockerFile)
+            destFile = project.file(project.nebulaDocker.dockerFile)
             dependsOn project.tasks['distTar']
             dependsOn project.tasks['dockerCopyDistResources']
-            from "${project.daDocker.dockerBase}"
-            maintainer project.daDocker.maintainerEmail
+            from "${project.nebulaDocker.dockerBase}"
+            maintainer project.nebulaDocker.maintainerEmail
 
             addFile "${project.distTar.archiveName}", '/'
-            runCommand "ln -s ${-> project.daDocker.appDir} ${project.daDocker.appDirLatest}"
-            entryPoint "${-> project.daDocker.appDir}/bin/${project.applicationName}"
+            runCommand "ln -s ${-> project.nebulaDocker.appDir} ${project.nebulaDocker.appDirLatest}"
+            entryPoint "${-> project.nebulaDocker.appDir}/bin/${project.applicationName}"
         }
 
         project.tasks.create(name: 'buildImage', type: DockerBuildImage) {
@@ -122,25 +116,25 @@ class NebulaDockerPlugin implements Plugin<Project> {
     }
 
     void apply(Project project) {
-        project.extensions.create("daDocker", DaDockerExtension)
-        def daDockerExt = project.daDocker
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        def nebulaDockerExt = project.nebulaDocker
 
         project.configure(project) {
             apply plugin: 'com.bmuschko.docker-java-application'
         }
 
-        assignDefaults project, daDockerExt
+        assignDefaults project, nebulaDockerExt
         project.docker {
-            url = daDockerExt.dockerUrl
+            url = nebulaDockerExt.dockerUrl
             javaApplication {
-                baseImage = daDockerExt.dockerBase
-                maintainer = daDockerExt.maintainerEmail
+                baseImage = nebulaDockerExt.dockerBase
+                maintainer = nebulaDockerExt.maintainerEmail
             }
         }
 
         project.afterEvaluate {
-            if (!project.daDocker.appDir) {
-                project.daDocker.appDir = "/${project.applicationName}-${-> project.version}"
+            if (!project.nebulaDockerExt.appDir) {
+                project.nebulaDockerExt.appDir = "/${project.applicationName}-${-> project.version}"
             }
             createAllTasks project
         }
