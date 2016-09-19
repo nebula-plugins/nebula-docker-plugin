@@ -10,6 +10,7 @@ import org.gradle.api.Plugin
 class NebulaDockerExtension {
     // main ones
     def String maintainerEmail
+    def Set<String> environments
     def Map<String, String> dockerRepo
     def String dockerUrl
     def String dockerBase
@@ -37,6 +38,7 @@ class NebulaDockerPlugin implements Plugin<Project> {
     final String TITAN_PROD = "titan-registry.main.us-east-1.dynprod.netflix.net:7001"
     final String DOCKER_URL_LOCALHOST = "http://localhost:4243"
     final String DOCKER_BASE_OPEN_JRE = "java:openjdk-8-jre"
+    final Set<String> ENVIRONMENTS = ['test', 'prod'] as Set
 
     final String DEF_DOCKER_FILE = "./build/docker/Dockerfile"
 
@@ -55,8 +57,8 @@ class NebulaDockerPlugin implements Plugin<Project> {
             def groupAppName = "${project.group}/${project.applicationName}"
             nebulaDockerExtension.dockerRepo = [test: TITAN_TEST + "/$groupAppName", prod: TITAN_PROD + "/$groupAppName"]
         }
-        if (!project.nebulaDockerExtension.appDirLatest) {
-            project.nebulaDockerExtension.appDirLatest = "/${project.applicationName}-latest"
+        if (!project.nebulaDocker.appDirLatest) {
+            project.nebulaDocker.appDirLatest = "/${project.applicationName}-latest"
         }
     }
 
@@ -133,8 +135,8 @@ class NebulaDockerPlugin implements Plugin<Project> {
         }
 
         project.afterEvaluate {
-            if (!project.nebulaDockerExt.appDir) {
-                project.nebulaDockerExt.appDir = "/${project.applicationName}-${-> project.version}"
+            if (!project.nebulaDocker.appDir) {
+                project.nebulaDocker.appDir = "/${project.applicationName}-${-> project.version}"
             }
             createAllTasks project
         }

@@ -1,32 +1,37 @@
 # Nebula Docker Plugin
 
-Plugin to help with assembling Docker images from Java apps. This is a very opinionated plugin (in the spirit of Nebula) regarding the layout of the image  
+Plugin to help with assembling Docker images from Java apps. This is a very opinionated plugin (in the spirit of Nebula) regarding the layout of the docker image.
 
-Gradle resolution strategies and module metadata provide an effective way to solve the most common dependency issues, however sharing these rules between projects is cumbersome, and requires custom plugins or `apply from` calls. This plugin provides general purpose rule types, allowing rules to be published, versioned, shared between projects, and optionally [dependency locked](https://github.com/nebula-plugins/gradle-dependency-lock-plugin).
+It uses the [docker gradle plugin](https://github.com/bmuschko/gradle-docker-plugin) by [Benjamin Muschko](https://github.com/bmuschko) to define a set of "opinionated" tasks for easily creating a docker image.
 
-These rule types solve the most common cause of dependency issues in projects, including:
+The plugin relies on the `application` plugin, which offers the `distTar` task; the `distTar` task will create a tarball using name format `applicationName-version.tar` (e.g. `application-1.0.1.tar`). This tarball will unpack in a directory which contains the version number (e.g. `application-1.0.1` in the above example) -- and as such when applying the `gradle-docker-plugin` the entry point to the docker image would be set in this case to `/application-1.0.1/bin/application`. Each incremental version will see a change in the tarball name and therefore in the docker image entry point. This has the implication of having to update other systems which need to start the docker image with the new version/path. 
 
-- Duplicate classes caused by changes to group or artifact ids, without renaming packages
-- Duplicate classes caused by bundle dependencies, which do not conflict resolve against the normal dependencies for that library
-- Lack of version alignment between libraries, where version alignment is needed for compatibility
-- Ensuring a minimum version of a library
+To eliminate this issue, the plugin adds a symlink in the docker image : `appicationName-latest` -> `applicationName-version` directory and then uses the symlink to define the docker image entry point to be `application-latest/bin/application`. The `distTar` plugin will still generate a versioned tar and directory as per before, but simply adding the symlink in the docker image means that the docker image entry point is consistent across different versions of the docker image.
 
 # Quick Start
 
-Refer to the [Gradle Plugin Portal](https://plugins.gradle.org/plugin/nebula.resolution-rules) for instructions on how to apply the plugin.
+Simply apply the plugin in your `build.gradle`:
 
-## Rules
+```
+apply plugin: 'nebula.docker'
+```
 
-We produce a rules for dependencies found in Maven Central and other public repositories, to use those rules in your project add:
+That's it! The plugin will build the docker image and publish it for you.
 
-```groovy
-dependencies {
-    resolutionRules 'com.netflix.nebula:gradle-resolution-rules:latest.release'
+See the section below for customizing the plugin.
+
+## Customization
+
+The plugin exports an instance of `NebulaDockerExtension` via `project.nebulaDocker` -- which allows you to customize various aspects of the plugin execution as follows:
+
+```
+nebulaDocker {
+    maintainerEmail = 'some@email.address.com'
+    dockerBase = 'java:openjdk-8-jre'
+    appDir = '/myapp-name'
+    appDirLatest = '/myapp-latest
+    dockerFile = '/some/build/dir/Dockerfile'
+    dockerUrl = 'http://docker.host.com'
 }
 ```
 
-See the [gradle-resolution-rules](https://github.com/nebula-plugins/gradle-resolution-rules) project for details of the rules, and instructions on how to enable optional rule sets.
-
-# Documentation
-
-The project wiki contains the [full documentation](https://github.com/nebula-plugins/gradle-resolution-rules-plugin/wiki) for the plugin.
