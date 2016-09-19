@@ -1,67 +1,35 @@
+/*
+ * Copyright 2016 Netflix, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package nebula.plugin.docker
 
 import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
 import com.bmuschko.gradle.docker.tasks.image.DockerTagImage
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
-import org.gradle.api.Project
 import org.gradle.api.Plugin
+import org.gradle.api.Project
+import org.gradle.api.Task
 
-class NebulaDockerExtension {
-    // main ones
-    def String maintainerEmail
-    def Set<String> environments
-    def Map<String, String> dockerRepo
-    def String dockerUrl
-    def String dockerBase
-    def String dockerFile
-    def String appDir
-    def String appDirLatest
-
-
-    @Override
-    public String toString() {
-        return "NebulaDockerExtension{" +
-                "maintainerEmail='" + maintainerEmail + '\'' +
-                ", dockerRepo=" + dockerRepo +
-                ", dockerUrl='" + dockerUrl + '\'' +
-                ", dockerBase='" + dockerBase + '\'' +
-                ", dockerFile='" + dockerFile + '\'' +
-                ", appDir='" + appDir + '\'' +
-                ", appDirLatest='" + appDirLatest + '\'' +
-                '}';
-    }
-}
-
-class NebulaDockerPlugin implements Plugin<Project> {
-    final String TITAN_TEST = "titan-registry.main.us-east-1.dyntest.netflix.net:7001"
-    final String TITAN_PROD = "titan-registry.main.us-east-1.dynprod.netflix.net:7001"
-    final String DOCKER_URL_LOCALHOST = "http://localhost:4243"
-    final String DOCKER_BASE_OPEN_JRE = "java:openjdk-8-jre"
-    final Set<String> ENVIRONMENTS = ['test', 'prod'] as Set
-
-    final String DEF_DOCKER_FILE = "./build/docker/Dockerfile"
-
-    private void assignDefaults(Project project, NebulaDockerExtension nebulaDockerExtension) {
-        if (!nebulaDockerExtension.dockerUrl) {
-            nebulaDockerExtension.dockerUrl = DOCKER_URL_LOCALHOST
-        }
-
-        if (!nebulaDockerExtension.dockerBase) {
-            nebulaDockerExtension.dockerBase = DOCKER_BASE_OPEN_JRE
-        }
-        if (!nebulaDockerExtension.dockerFile) {
-            nebulaDockerExtension.dockerFile = DEF_DOCKER_FILE
-        }
-        if (!nebulaDockerExtension.dockerRepo) {
-            def groupAppName = "${project.group}/${project.applicationName}"
-            nebulaDockerExtension.dockerRepo = [test: TITAN_TEST + "/$groupAppName", prod: TITAN_PROD + "/$groupAppName"]
-        }
-        if (!project.nebulaDocker.appDirLatest) {
-            project.nebulaDocker.appDirLatest = "/${project.applicationName}-latest"
-        }
-    }
-
+/**
+ * Nebula plugin which simplifies the process of creating docker images, tagging and pushing them to repo.
+ *
+ * @author ltudor
+ */
+class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensibleDefaults {
     private void createTasks(Project project, String envir) {
         NebulaDockerExtension nebulaDocker = project.nebulaDocker
 
@@ -108,12 +76,15 @@ class NebulaDockerPlugin implements Plugin<Project> {
             inputDir = project.tasks['createDockerfile'].destFile.parentFile
         }
 
-        for (def envir in ['Test', 'Prod']) {
+        List<Task> taskArr = []
+        for (def envir in project.nebulaDocker.environments) {
+            envir = lowerCaseCapitalize(envir)
             createTasks project, envir
+            taskArr << project.tasks["pushImage${envir}Latest"]
         }
 
         project.tasks.create(name: 'pushAllImages') {
-            dependsOn project.tasks["pushImageTestLatest"], project.tasks["pushImageProdLatest"]
+            dependsOn taskArr
         }
     }
 

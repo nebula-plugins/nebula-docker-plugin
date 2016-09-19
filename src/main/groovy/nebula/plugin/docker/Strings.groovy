@@ -14,5 +14,22 @@
  * limitations under the License.
  *
  */
+package nebula.plugin.docker
 
-rootProject.name = 'nebula.docker'
+/**
+ * Trait which offers string manipulation utils.
+ *
+ * @author ltudor
+ */
+trait Strings {
+    /**
+     * Given a string ensures it's all lowercase and initial letter capital.
+     *
+     * @param s String to lowercase and capitalize.
+     * @return Original string all lowercase and capitalize or null/empty if the original string is null/empty.
+     */
+    String lowerCaseCapitalize(String s) {
+        if (!s) return s
+        s.toLowerCase().capitalize()
+    }
+}
