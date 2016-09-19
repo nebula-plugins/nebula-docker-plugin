@@ -1,5 +1,6 @@
-# Gradle Resolution Rules Plugin
+# Nebula Docker Plugin
 
+Plugin to help with assembling Docker images from Java apps. This is a very opinionated plugin (in the spirit of Nebula) regarding the layout of the image  
 
 Gradle resolution strategies and module metadata provide an effective way to solve the most common dependency issues, however sharing these rules between projects is cumbersome, and requires custom plugins or `apply from` calls. This plugin provides general purpose rule types, allowing rules to be published, versioned, shared between projects, and optionally [dependency locked](https://github.com/nebula-plugins/gradle-dependency-lock-plugin).
 

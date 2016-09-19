@@ -44,7 +44,7 @@ contacts {
 
 pluginBundle {
     plugins {
-        resolutionRules {
+        docker {
             id = 'nebula.docker'
             displayName = 'Gradle Docker Package Plugin'
             description = project.description
