@@ -23,7 +23,6 @@ package nebula.plugin.docker
  */
 class NebulaDockerExtension {
     def String maintainerEmail
-    def Set<String> environments
     def Map<String, String> dockerRepo
     def String dockerUrl
     def String dockerBase
@@ -31,18 +30,22 @@ class NebulaDockerExtension {
     def String appDir
     def String appDirLatest
 
+    Set<String> getEnvironments() {
+        if (!dockerRepo) return null
+        Collections.unmodifiableSet(dockerRepo.keySet())
+    }
 
     @Override
     public String toString() {
         return "NebulaDockerExtension{" +
                 "maintainerEmail='" + maintainerEmail + '\'' +
-                ", environments=" + environments +
                 ", dockerRepo=" + dockerRepo +
                 ", dockerUrl='" + dockerUrl + '\'' +
                 ", dockerBase='" + dockerBase + '\'' +
                 ", dockerFile='" + dockerFile + '\'' +
                 ", appDir='" + appDir + '\'' +
                 ", appDirLatest='" + appDirLatest + '\'' +
+                ", environments=" + getEnvironments() +
                 '}';
     }
 }

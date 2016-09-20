@@ -30,7 +30,6 @@ trait NebulaDockerSensibleDefaults {
     final String TITAN_PROD = "titan-registry.main.us-east-1.dynprod.netflix.net:7001"
     final String DOCKER_URL_LOCALHOST = "http://localhost:4243"
     final String DOCKER_BASE_OPEN_JRE = "java:openjdk-8-jre"
-    final Set<String> ENVIRONMENTS = ['test', 'prod'] as Set
     final String DEF_DOCKER_FILE = "./build/docker/Dockerfile"
 
     /**
@@ -53,13 +52,9 @@ trait NebulaDockerSensibleDefaults {
             nebulaDockerExtension.dockerFile = DEF_DOCKER_FILE
         }
 
-        if (!nebulaDockerExtension.environments && !nebulaDockerExtension.dockerRepo) {
-            nebulaDockerExtension.environments = ENVIRONMENTS
+        if (!nebulaDockerExtension.dockerRepo) {
             def groupAppName = "${project.group}/${project.applicationName}"
             nebulaDockerExtension.dockerRepo = [test: TITAN_TEST + "/$groupAppName", prod: TITAN_PROD + "/$groupAppName"]
-        } else if ((!nebulaDockerExtension.dockerRepo && nebulaDockerExtension.environments) ||
-                (nebulaDockerExtension.dockerRepo && !nebulaDockerExtension.environments)) {
-            throw new IllegalArgumentException("You need to set both `environments` and `dockerRepo` or neither of them")
         }
 
         if (!project.nebulaDocker.appDirLatest) {

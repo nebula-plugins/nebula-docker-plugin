@@ -16,7 +16,6 @@
  */
 package nebula.plugin.docker
 
-import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
@@ -26,32 +25,6 @@ import spock.lang.Specification
  * @author ltudor
  */
 class NebulaDockerSensibleDefaultsTest extends Specification {
-    def "assignDefaults throws error if environments is set but not dockerRepo"() {
-        def x = new Object() as NebulaDockerSensibleDefaults
-        def ext = new NebulaDockerExtension()
-        ext.environments = ['abc', 'def']
-        def project = Mock(Project)
-
-        when:
-        x.assignDefaults project, ext
-
-        then:
-        thrown(IllegalArgumentException)
-    }
-
-    def "assignDefaults throws error if dockerRepo is set but not environments"() {
-        def x = new Object() as NebulaDockerSensibleDefaults
-        def ext = new NebulaDockerExtension()
-        ext.dockerRepo = ['abc': 'something', 'def': 'something']
-        def project = Mock(Project)
-
-        when:
-        x.assignDefaults project, ext
-
-        then:
-        thrown(IllegalArgumentException)
-    }
-
     def "assignDefaults sets defaults if not set"() {
         def appName = "myapp"
         def group = "mygroup"
