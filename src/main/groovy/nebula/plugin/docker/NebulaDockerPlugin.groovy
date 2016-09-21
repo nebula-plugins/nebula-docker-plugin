@@ -56,7 +56,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
     }
 
     protected void createAllTasks(Project project) {
-        project.tasks.create(name: 'createDockerfile', type: Dockerfile) {
+        project.tasks.create(name: 'createDockerfile', type: Dockerfile) { task ->
             destFile = project.file(project.nebulaDocker.dockerFile)
             dependsOn project.tasks['distTar']
             dependsOn project.tasks['dockerCopyDistResources']
@@ -66,6 +66,9 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             addFile "${project.distTar.archiveName}", '/'
             runCommand "ln -s ${-> project.nebulaDocker.appDir} ${project.nebulaDocker.appDirLatest}"
             entryPoint "${-> project.nebulaDocker.appDir}/bin/${project.applicationName}"
+            if (project.nebulaDocker.dockerImage) {
+                project.nebulaDocker.dockerImage(project, task)
+            }
         }
 
         project.tasks.create(name: 'buildImage', type: DockerBuildImage) {
