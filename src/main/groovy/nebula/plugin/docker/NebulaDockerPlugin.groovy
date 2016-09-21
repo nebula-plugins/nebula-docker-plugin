@@ -32,7 +32,7 @@ import org.gradle.api.Task
  * @author ltudor
  */
 class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensibleDefaults {
-    private void createTasks(Project project, String envir) {
+    protected void createTasks(Project project, String envir) {
         NebulaDockerExtension nebulaDocker = project.nebulaDocker
 
         ["", "Latest"].each { tags ->
@@ -55,7 +55,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
         }
     }
 
-    private void createAllTasks(Project project) {
+    protected void createAllTasks(Project project) {
         project.tasks.create(name: 'createDockerfile', type: Dockerfile) {
             destFile = project.file(project.nebulaDocker.dockerFile)
             dependsOn project.tasks['distTar']

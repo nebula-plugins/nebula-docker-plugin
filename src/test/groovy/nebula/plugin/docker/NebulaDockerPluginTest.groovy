@@ -16,6 +16,7 @@
  */
 package nebula.plugin.docker
 
+import nebula.test.ProjectSpec
 import spock.lang.Specification
 
 /**
@@ -23,5 +24,41 @@ import spock.lang.Specification
  *
  * @author ltudor
  */
-class NebulaDockerPluginTest extends Specification {
+class NebulaDockerPluginTest extends ProjectSpec {
+    def "createTasks create 2 sets of tasks one for current version one for latest"() {
+        def repoUrl = 'titan-registry.main.us-east-1.dynprod.netflix.net:7001'
+        def x = new NebulaDockerPlugin()
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        project.configure(project) {
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.tasks.create 'buildImage'
+        project.nebulaDocker.dockerRepo = [test: repoUrl]
+
+        when:
+        x.createTasks project, "Test"
+        def tagTest = project.tasks['dockerTagImageTest']
+        def pushTest = project.tasks['pushImageTest']
+        def tagTestLatest = project.tasks['dockerTagImageTestLatest']
+        def pushTestLatest = project.tasks['pushImageTestLatest']
+
+        then:
+        tagTest
+        tagTest.dependsOn.size() >= 1
+        tagTest.dependsOn.find({ it.hasProperty('name') && it.name == 'buildImage' })
+        tagTest.repository == repoUrl
+
+        pushTest
+        pushTest.dependsOn.size() >= 1
+        pushTest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTest' })
+
+        tagTestLatest
+        tagTestLatest.dependsOn.size() >= 1
+        tagTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'pushImageTest' })
+        tagTestLatest.repository == repoUrl
+
+        pushTestLatest
+        pushTestLatest.dependsOn.size() >= 1
+        pushTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTestLatest' })
+    }
 }
