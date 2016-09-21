@@ -26,6 +26,8 @@ import org.gradle.api.Task
 
 /**
  * Nebula plugin which simplifies the process of creating docker images, tagging and pushing them to repo.
+ * TODO: Use ProjectSpec and IntegrationSpec for testing
+ * TODO: add a hook to allow the createDockerFile to be customized such that more files can be added and commands executed.
  *
  * @author ltudor
  */
@@ -33,27 +35,22 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
     private void createTasks(Project project, String envir) {
         NebulaDockerExtension nebulaDocker = project.nebulaDocker
 
-        for (def tags in ["", "Latest"]) {
-            project.tasks.create(name: "dockerTagImage${envir}${tags}", type: DockerTagImage) {
-                if (tags == "") {
-                    dependsOn project.tasks['buildImage']
-                } else {
-                    dependsOn project.tasks["pushImage${envir}"]
-                }
+        ["", "Latest"].each { tags ->
+            def dependTaskName = (!tags) ? "buildImage" : "pushImage${envir}"
+            String taggingVersion = (!tags) ? "${project.version}".toString() : "latest"
+
+            project.tasks.create(name: "dockerTagImage${envir}${tags}", type: DockerTagImage) { task ->
+                dependsOn project.tasks[dependTaskName]
                 targetImageId { project.buildImage.imageId }
                 repository = nebulaDocker.dockerRepo[envir.toLowerCase()]
-                if (tags == "") {
-                    conventionMapping.tag = { "${-> project.version}".toString() }
-                } else {
-                    conventionMapping.tag = { "latest" }
-                }
+                task.conventionMapping.tag = { taggingVersion }
                 force = true
             }
 
-            project.tasks.create(name: "pushImage${envir}${tags}", type: DockerPushImage) {
+            project.tasks.create(name: "pushImage${envir}${tags}", type: DockerPushImage) { task ->
                 dependsOn project.tasks["dockerTagImage${envir}${tags}"]
-                conventionMapping.imageName = { project.tasks["dockerTagImage${envir}${tags}"].getRepository() }
-                conventionMapping.tag = { project.tasks["dockerTagImage${envir}${tags}"].getTag() }
+                task.conventionMapping.imageName = { project.tasks["dockerTagImage${envir}${tags}"].getRepository() }
+                task.conventionMapping.tag = { project.tasks["dockerTagImage${envir}${tags}"].getTag() }
             }
         }
     }
@@ -77,7 +74,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
         }
 
         List<Task> taskArr = []
-        for (def envir in project.nebulaDocker.environments) {
+        project.nebulaDocker.environments.each { envir ->
             envir = lowerCaseCapitalize(envir)
             createTasks project, envir
             taskArr << project.tasks["pushImage${envir}Latest"]
