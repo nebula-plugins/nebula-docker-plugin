@@ -67,7 +67,8 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             runCommand "ln -s ${-> project.nebulaDocker.appDir} ${project.nebulaDocker.appDirLatest}"
             entryPoint "${-> project.nebulaDocker.appDir}/bin/${project.applicationName}"
             if (project.nebulaDocker.dockerImage) {
-                project.nebulaDocker.dockerImage(project, task)
+                task.with project.nebulaDocker.dockerImage.delegate = task
+                task.with project.nebulaDocker.dockerImage(project, task)
             }
         }
 
