@@ -128,9 +128,10 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.configure(project) {
             apply plugin: 'com.bmuschko.docker-java-application'
         }
-        project.nebulaDocker.dockerRepo = [test: 'abc', prod: 'xyz']
+        project.nebulaDocker.dockerRepo = [test: 'abc', prod: 'xyz', 'dev':'123']
         project.tasks.create 'pushImageTestLatest'
         project.tasks.create 'pushImageProdLatest'
+        project.tasks.create 'pushImageDevLatest'
 
         when:
         x.taskPushAllImages project
@@ -139,10 +140,12 @@ class NebulaDockerPluginTest extends ProjectSpec {
         then:
         1 * x.createTasks(project, 'Test') >> {}
         1 * x.createTasks(project, 'Prod') >> {}
+        1 * x.createTasks(project, 'Dev') >> {}
         task.dependsOn.size() == 2
         def dpp = task.dependsOn.find({ !(it instanceof UnionFileCollection) })
-        dpp.size() == 2
+        dpp.size() == 3
         dpp.find({ it.name == 'pushImageTestLatest' })
         dpp.find({ it.name == 'pushImageProdLatest' })
+        dpp.find({ it.name == 'pushImageDevLatest' })
     }
 }
