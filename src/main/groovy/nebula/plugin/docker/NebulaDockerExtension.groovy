@@ -30,6 +30,7 @@ class NebulaDockerExtension {
     def String appDir
     def String appDirLatest
     def Closure dockerImage
+    def Closure<String> tagVersion
 
     Set<String> getEnvironments() {
         if (!dockerRepo) return null

@@ -37,13 +37,22 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
 
         ["", "Latest"].each { tags ->
             def dependTaskName = (!tags) ? "buildImage" : "pushImage${envir}"
-            String taggingVersion = (!tags) ? "${project.version}".toString() : "latest"
+            String taggingVersion = "latest"
+            if (!tags) {
+                if (nebulaDocker.tagVersion) {
+                    nebulaDocker.tagVersion.delegate = project
+                    taggingVersion = nebulaDocker.tagVersion(project)
+                } else {
+                    taggingVersion = "${project.version}".toString()
+                }
+            }
 
             project.tasks.create(name: "dockerTagImage${envir}${tags}", type: DockerTagImage) { task ->
                 dependsOn project.tasks[dependTaskName]
                 targetImageId { project.buildImage.imageId }
                 repository = nebulaDocker.dockerRepo[envir.toLowerCase()]
                 task.conventionMapping.tag = { taggingVersion }
+                println "Using version $taggingVersion"
                 force = true
             }
 
@@ -55,7 +64,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
         }
     }
 
-    protected void createAllTasks(Project project) {
+    protected Task taskCreateDockerfile(Project project) {
         project.tasks.create(name: 'createDockerfile', type: Dockerfile) { task ->
             destFile = project.file(project.nebulaDocker.dockerFile)
             dependsOn project.tasks['distTar']
@@ -67,16 +76,20 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             runCommand "ln -s ${-> project.nebulaDocker.appDir} ${project.nebulaDocker.appDirLatest}"
             entryPoint "${-> project.nebulaDocker.appDir}/bin/${project.applicationName}"
             if (project.nebulaDocker.dockerImage) {
-                task.with project.nebulaDocker.dockerImage.delegate = task
-                task.with project.nebulaDocker.dockerImage(project, task)
+                project.nebulaDocker.dockerImage.delegate = task
+                project.nebulaDocker.dockerImage(project, task)
             }
         }
+    }
 
+    protected Task taskBuildImage(Project project) {
         project.tasks.create(name: 'buildImage', type: DockerBuildImage) {
             dependsOn project.tasks['createDockerfile']
             inputDir = project.tasks['createDockerfile'].destFile.parentFile
         }
+    }
 
+    protected Task taskPushAllImages(Project project) {
         List<Task> taskArr = []
         project.nebulaDocker.environments.each { envir ->
             envir = lowerCaseCapitalize(envir)
@@ -87,6 +100,12 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
         project.tasks.create(name: 'pushAllImages') {
             dependsOn taskArr
         }
+    }
+
+    protected void createAllTasks(Project project) {
+        taskCreateDockerfile project
+        taskBuildImage project
+        taskPushAllImages project
     }
 
     void apply(Project project) {
