@@ -73,7 +73,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             maintainer project.nebulaDocker.maintainerEmail
 
             addFile "${project.distTar.archiveName}", '/'
-            runCommand "ln -s ${-> project.nebulaDocker.appDir} ${project.nebulaDocker.appDirLatest}"
+            runCommand "ln -s '${-> project.nebulaDocker.appDir}' '${project.nebulaDocker.appDirLatest}'"
             entryPoint "${-> project.nebulaDocker.appDir}/bin/${project.applicationName}"
             if (project.nebulaDocker.dockerImage) {
                 project.nebulaDocker.dockerImage.delegate = task
@@ -116,16 +116,16 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             apply plugin: 'com.bmuschko.docker-java-application'
         }
 
-        assignDefaults project, nebulaDockerExt
-        project.docker {
-            url = nebulaDockerExt.dockerUrl
-            javaApplication {
-                baseImage = nebulaDockerExt.dockerBase
-                maintainer = nebulaDockerExt.maintainerEmail
-            }
-        }
-
         project.afterEvaluate {
+            assignDefaults project, nebulaDockerExt
+            project.docker {
+                url = nebulaDockerExt.dockerUrl
+                javaApplication {
+                    baseImage = nebulaDockerExt.dockerBase
+                    maintainer = nebulaDockerExt.maintainerEmail
+                }
+            }
+
             if (!project.nebulaDocker.appDir) {
                 project.nebulaDocker.appDir = "/${project.applicationName}-${-> project.version}"
             }

@@ -128,7 +128,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.configure(project) {
             apply plugin: 'com.bmuschko.docker-java-application'
         }
-        project.nebulaDocker.dockerRepo = [test: 'abc', prod: 'xyz', 'dev':'123']
+        project.nebulaDocker.dockerRepo = [test: 'abc', prod: 'xyz', 'dev': '123']
         project.tasks.create 'pushImageTestLatest'
         project.tasks.create 'pushImageProdLatest'
         project.tasks.create 'pushImageDevLatest'
@@ -147,5 +147,70 @@ class NebulaDockerPluginTest extends ProjectSpec {
         dpp.find({ it.name == 'pushImageTestLatest' })
         dpp.find({ it.name == 'pushImageProdLatest' })
         dpp.find({ it.name == 'pushImageDevLatest' })
+    }
+
+    def "taskCreateDockerfile uses the property from NebulaDockerExtension and sets entry point and sets up right dependencies"() {
+        def x = new NebulaDockerPlugin()
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        project.configure(project) {
+            apply plugin: 'application'
+            apply plugin: 'distribution'
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.applicationName = 'xyz'
+
+        project.nebulaDocker.dockerFile = 'some docker file'
+        project.nebulaDocker.dockerBase = 'base docker'
+        project.nebulaDocker.maintainerEmail = 'some email'
+        project.nebulaDocker.appDir = 'app directory'
+        project.nebulaDocker.appDirLatest = 'latest directory'
+
+        when:
+        def task = x.taskCreateDockerfile(project)
+
+        then:
+        task.dependsOn.find { !(it instanceof UnionFileCollection) && (it.name == 'distTar') }
+        task.dependsOn.find { !(it instanceof UnionFileCollection) && (it.name == 'dockerCopyDistResources') }
+        task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
+        task.instructions.find { it instanceof Dockerfile.FromInstruction && it.command == 'base docker' }
+        task.instructions.find { it instanceof Dockerfile.MaintainerInstruction && it.command == 'some email' }
+        task.instructions.find { it instanceof Dockerfile.FileInstruction && (it.src == project.distTar.archiveName && it.dest == '/') }
+        task.instructions.find { it instanceof Dockerfile.RunCommandInstruction && it.command == "ln -s 'app directory' 'latest directory'" }
+        task.instructions.find { it instanceof Dockerfile.EntryPointInstruction && it.command == ['app directory/bin/xyz'] }
+    }
+
+    def "taskCreateDockerfile also invokes the dockerImage closure if set"() {
+        def x = new NebulaDockerPlugin()
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        project.configure(project) {
+            apply plugin: 'application'
+            apply plugin: 'distribution'
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.applicationName = 'xyz'
+
+        project.nebulaDocker.dockerFile = 'some docker file'
+        project.nebulaDocker.dockerBase = 'base docker'
+        project.nebulaDocker.maintainerEmail = 'some email'
+        project.nebulaDocker.appDir = 'app directory'
+        project.nebulaDocker.appDirLatest = 'latest directory'
+        def calls = 0
+        project.nebulaDocker.dockerImage = { project, task ->
+            calls++
+        }
+
+        when:
+        def task = x.taskCreateDockerfile(project)
+
+        then:
+        task.dependsOn.find { !(it instanceof UnionFileCollection) && (it.name == 'distTar') }
+        task.dependsOn.find { !(it instanceof UnionFileCollection) && (it.name == 'dockerCopyDistResources') }
+        task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
+        task.instructions.find { it instanceof Dockerfile.FromInstruction && it.command == 'base docker' }
+        task.instructions.find { it instanceof Dockerfile.MaintainerInstruction && it.command == 'some email' }
+        task.instructions.find { it instanceof Dockerfile.FileInstruction && (it.src == project.distTar.archiveName && it.dest == '/') }
+        task.instructions.find { it instanceof Dockerfile.RunCommandInstruction && it.command == "ln -s 'app directory' 'latest directory'" }
+        task.instructions.find { it instanceof Dockerfile.EntryPointInstruction && it.command == ['app directory/bin/xyz'] }
+        calls == 1
     }
 }
