@@ -19,7 +19,6 @@ package nebula.plugin.docker
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import nebula.test.ProjectSpec
 import org.gradle.api.internal.file.UnionFileCollection
-import spock.lang.Specification
 
 /**
  * Unit test for {@link NebulaDockerPlugin}
