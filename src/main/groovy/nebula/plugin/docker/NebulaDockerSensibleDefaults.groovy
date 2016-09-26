@@ -57,8 +57,12 @@ trait NebulaDockerSensibleDefaults {
             nebulaDockerExtension.dockerRepo = [test: TITAN_TEST + "/$groupAppName", prod: TITAN_PROD + "/$groupAppName"]
         }
 
-        if (!project.nebulaDocker.appDirLatest) {
-            project.nebulaDocker.appDirLatest = "/${project.applicationName}-latest"
+        if (!nebulaDockerExtension.appDirLatest) {
+            nebulaDockerExtension.appDirLatest = "/${project.applicationName}-latest"
+        }
+
+        if (!nebulaDockerExtension.appDir) {
+            nebulaDockerExtension.appDir = "/${project.applicationName}-${-> project.version}"
         }
     }
 }

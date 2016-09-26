@@ -35,6 +35,7 @@ class NebulaDockerSensibleDefaultsTest extends Specification {
         project.group = group
         project.ext["applicationName"] = appName
         project.extensions.add "nebulaDocker", ext
+        project.version = '1.2.3'
 
         when:
         x.assignDefaults project, ext
@@ -47,6 +48,6 @@ class NebulaDockerSensibleDefaultsTest extends Specification {
         ext.dockerBase == x.DOCKER_BASE_OPEN_JRE
         ext.dockerFile == x.DEF_DOCKER_FILE
         ext.appDirLatest == "/${appName}-latest"
-        ext.appDir == null  //this gets set in a different place
+        ext.appDir == "/${appName}-1.2.3"
     }
 }

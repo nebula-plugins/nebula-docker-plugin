@@ -126,9 +126,6 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
                 }
             }
 
-            if (!project.nebulaDocker.appDir) {
-                project.nebulaDocker.appDir = "/${project.applicationName}-${-> project.version}"
-            }
             createAllTasks project
         }
     }
