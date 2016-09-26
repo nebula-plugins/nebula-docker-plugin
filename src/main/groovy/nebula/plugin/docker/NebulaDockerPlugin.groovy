@@ -26,8 +26,6 @@ import org.gradle.api.Task
 
 /**
  * Nebula plugin which simplifies the process of creating docker images, tagging and pushing them to repo.
- * TODO: Use ProjectSpec and IntegrationSpec for testing
- * TODO: add a hook to allow the createDockerFile to be customized such that more files can be added and commands executed.
  *
  * @author ltudor
  */
