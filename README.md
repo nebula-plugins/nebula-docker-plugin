@@ -179,3 +179,6 @@ afterEvaluate {
 
 
 ```
+
+**NOTE** The code above only defines `test` and `prod` environments, if one needs to add an extra environment, need to copy `dockerTagImagexxx`, `pushImagexxx`, `dockerTagImagexxxLatest` and `pushImagexxxLatest` and adjust as well as alter `pushAllImages` to include those tasks in dependencies.
+With this plugin, simply add another entry in the `dockerRepo` property.
