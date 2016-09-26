@@ -51,4 +51,131 @@ nebulaDocker {
 }
 ```
 
+where:
 
+
+| Field             | Type               | Default Value (if not set)                       | Description                                                                                                       |
+|-------------------|--------------------|--------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| `maintainerEmail` | String             | `null` (not set)                                 | Email address of the maintainer of this docker image                                                              |
+| `dockerUrl`       | String             | "http://localhost:4243"                          | URL used to communicate with the docker process to build the image etc                                            |              
+| `dockerBase`      | String             | "java:openjdk-8-jre"                             | Base docker image to extend / build your docker image from                                                        |
+| `dockerFile`      | String             | "./build/docker/Dockerfile"                      | Location of the `Dockerfile` in your build. If you have a handcrafted `Dockerfile` specify it here.               |
+| `appDir`          | String             | "/${project.applicationName}-${project.version}" | Directory in the docker image where your app will be unpacked.                                                    |
+| `appDirLatest`    | String             | "/${project.applicationName}-latest"             | Symlink directory which will be symlink to the `appDir` folder and be set to the entry point in the docker image. |
+| `dockerRepo`      | Map<String,String> | [test: "titan-registry.main.us-east-1.dyntest.netflix.net:7001/${project.group}/${project.applicationName}", prod: "titan-registry.main.us-east-1.dynprod.netflix.net:7001/${project.group}/${project.applicationName}"] | Map of environment to docker repository. This allows for the docker image to be deployed in different environments / repos. For instance, if you have a different docker repo for 'test' and 'prod' you can define this as `project.nebulaDocker.dockerRepo = [test: 'http://url.for.test/path', prod: 'https://url.prod:port/path']`. _Note_ that the keys of this map are used to generate `environments` property on the `project.nebulaDocker`. |
+| `dockerImage`     | Closure            | `null` (not set)                                 | Closure to execute when building the docker image. By default the code just creates the `appDir` directory and symlinks `appDirLatest` to it and sets the entry point to the shell script in `appDirLatest/bin`. If you need any other files or symlinks or commands to be executed, specify them here. |
+| `tagVersion`      | Closure<String>    | `{ "${project.version}" }`                       | Closure used to set the tag on the docker image. Typically the code will set 2 tags: one with the application version and one with <code>latest</code>. This closure allows you to define the tagging for the application version. |
+
+# Boilerplate Code
+
+This is provided for reference, but this is the equivalent boilerplate code the plugin replaces:
+
+```groovy
+...
+apply plugin: 'com.bmuschko.docker-java-application'
+...
+def dockerRepositoryProd = "repository.docker.test.net/${project.group}/${project.applicationName}"
+def dockerRepositoryTest = "repository.docker.production.com/${project.group}/${project.applicationName}"
+def dockerBase = 'java:openjdk-8-jre'
+...
+buildscript { dependencies { classpath "com.bmuschko:gradle-docker-plugin:$dockerVersion" } }
+docker {
+    url = 'http://docker.url.com:port'
+    javaApplication {
+        baseImage = dockerBase
+        maintainer = 'email-address@maintainer.domain'
+    }
+}
+
+import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
+import com.bmuschko.gradle.docker.tasks.image.DockerTagImage
+import com.bmuschko.gradle.docker.tasks.image.DockerPushImage
+import com.bmuschko.gradle.docker.tasks.image.Dockerfile
+
+afterEvaluate {
+    def appDir = "/${project.applicationName}-${project.version}"
+    def appDirLatest = "/${project.applicationName}-latest"
+
+    task createDockerfile(type: Dockerfile) {
+        destFile = project.file('./build/docker/Dockerfile')
+        dependsOn distTar
+        dependsOn dockerCopyDistResources
+        from "$dockerBase"
+        maintainer 'email-address@maintainer.domain'
+
+
+        println "Using tar: ${distTar.archiveName}"
+        addFile "${distTar.archiveName}", '/'
+        runCommand "ln -s ${appDir} ${appDirLatest}"
+        entryPoint "${appDir}/bin/${project.applicationName}"
+    }
+
+    task buildImage(type: DockerBuildImage) {
+        dependsOn createDockerfile
+        inputDir = createDockerfile.destFile.parentFile
+    }
+
+    // TEST
+    task dockerTagImageTest(type: DockerTagImage) {
+        dependsOn buildImage
+        targetImageId { buildImage.imageId }
+        repository = dockerRepositoryTest
+        conventionMapping.tag = { project.version }
+        force = true
+    }
+
+    task pushImageTest(type: DockerPushImage) {
+        dependsOn dockerTagImageTest
+        conventionMapping.imageName = { dockerTagImageTest.getRepository() }
+        conventionMapping.tag = { dockerTagImageTest.getTag() }
+    }
+
+    task dockerTagImageTestLatest(type: DockerTagImage) {
+        dependsOn pushImageTest
+        targetImageId { buildImage.imageId }
+        repository = dockerRepositoryTest
+        conventionMapping.tag = { 'latest' }
+        force = true
+    }
+    task pushImageTestLatest(type: DockerPushImage) {
+        dependsOn dockerTagImageTestLatest
+        conventionMapping.imageName = { dockerTagImageTest.getRepository() }
+        conventionMapping.tag = { dockerTagImageTestLatest.getTag() }
+    }
+
+    // PROD
+    task dockerTagImageProd(type: DockerTagImage) {
+        dependsOn buildImage
+        targetImageId { buildImage.imageId }
+        repository = dockerRepositoryProd
+        conventionMapping.tag = { project.version }
+        force = true
+    }
+
+    task pushImageProd(type: DockerPushImage) {
+        dependsOn dockerTagImageProd
+        conventionMapping.imageName = { dockerTagImageProd.getRepository() }
+        conventionMapping.tag = { dockerTagImageProd.getTag() }
+    }
+
+    task dockerTagImageProdLatest(type: DockerTagImage) {
+        dependsOn pushImageProd
+        targetImageId { buildImage.imageId }
+        repository = dockerRepositoryProd
+        conventionMapping.tag = { 'latest' }
+        force = true
+    }
+
+    task pushImageProdLatest(type: DockerPushImage) {
+        dependsOn dockerTagImageProdLatest
+        conventionMapping.imageName = { dockerTagImageProd.getRepository() }
+        conventionMapping.tag = { dockerTagImageProdLatest.getTag() }
+    }
+
+    task pushAllImages {
+        dependsOn pushImageTestLatest, pushImageProdLatest
+    }
+}
+
+
+```

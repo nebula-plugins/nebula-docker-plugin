@@ -84,7 +84,7 @@ class NebulaDockerExtension {
     /**
      * Closure used to set the tag on the docker image.
      * Typically the code will set 2 tags: one with the application version and one with <code>latest</code>.
-     * This closure allows you to define the tagging for the applicaiton version.
+     * This closure allows you to define the tagging for the application version.
      * If not set, the application version will be set, as per above.
      */
     def Closure<String> tagVersion
