@@ -16,8 +16,8 @@
  */
 
 plugins {
-    id 'com.gradle.plugin-publish' version '0.9.5'
-    id 'nebula.plugin-plugin' version '4.24.0'
+    id 'com.gradle.plugin-publish' version '0.9.6'
+    id 'nebula.plugin-plugin' version '4.24.2'
 }
 
 apply plugin: 'groovy'

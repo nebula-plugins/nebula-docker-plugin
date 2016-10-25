@@ -15,4 +15,4 @@
  *
  */
 
-rootProject.name = 'nebula.docker'
+rootProject.name = 'nebula-docker-plugin'
