@@ -19,7 +19,6 @@ package nebula.plugin.docker
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import nebula.test.ProjectSpec
 import org.gradle.api.Task
-import org.gradle.api.internal.file.UnionFileCollection
 
 /**
  * Unit test for {@link NebulaDockerPlugin}
@@ -142,7 +141,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         1 * x.createTasks(project, 'Prod') >> {}
         1 * x.createTasks(project, 'Dev') >> {}
         task.dependsOn.size() == 2
-        def dpp = task.dependsOn.find({ !(it instanceof UnionFileCollection) })
+        def dpp = task.dependsOn.find({ it instanceof List })
         dpp.size() == 3
         dpp.find({ it.name == 'pushImageTestLatest' })
         dpp.find({ it.name == 'pushImageProdLatest' })
