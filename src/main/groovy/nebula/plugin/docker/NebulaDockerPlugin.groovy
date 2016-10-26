@@ -34,7 +34,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
         NebulaDockerExtension nebulaDocker = project.nebulaDocker
 
         ["", "Latest"].each { tags ->
-            def dependTaskName = (!tags) ? "buildImage" : "pushImage${envir}"
+            String dependTaskName = (!tags) ? "buildImage" : "pushImage${envir}"
             String taggingVersion = "latest"
             if (!tags) {
                 if (nebulaDocker.tagVersion) {

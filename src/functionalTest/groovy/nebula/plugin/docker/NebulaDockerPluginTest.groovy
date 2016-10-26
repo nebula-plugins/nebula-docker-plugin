@@ -18,6 +18,7 @@ package nebula.plugin.docker
 
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import nebula.test.ProjectSpec
+import org.gradle.api.Task
 import org.gradle.api.internal.file.UnionFileCollection
 
 /**
@@ -168,8 +169,8 @@ class NebulaDockerPluginTest extends ProjectSpec {
         def task = x.taskCreateDockerfile(project)
 
         then:
-        task.dependsOn.find { !(it instanceof UnionFileCollection) && (it.name == 'distTar') }
-        task.dependsOn.find { !(it instanceof UnionFileCollection) && (it.name == 'dockerCopyDistResources') }
+        task.dependsOn.find { (it instanceof Task) && (it.name == 'distTar') }
+        task.dependsOn.find { (it instanceof Task) && (it.name == 'dockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { it instanceof Dockerfile.FromInstruction && it.command == 'base docker' }
         task.instructions.find { it instanceof Dockerfile.MaintainerInstruction && it.command == 'some email' }
@@ -202,8 +203,8 @@ class NebulaDockerPluginTest extends ProjectSpec {
         def task = x.taskCreateDockerfile(project)
 
         then:
-        task.dependsOn.find { !(it instanceof UnionFileCollection) && (it.name == 'distTar') }
-        task.dependsOn.find { !(it instanceof UnionFileCollection) && (it.name == 'dockerCopyDistResources') }
+        task.dependsOn.find { (it instanceof Task) && (it.name == 'distTar') }
+        task.dependsOn.find { (it instanceof Task) && (it.name == 'dockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { it instanceof Dockerfile.FromInstruction && it.command == 'base docker' }
         task.instructions.find { it instanceof Dockerfile.MaintainerInstruction && it.command == 'some email' }
