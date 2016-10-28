@@ -63,6 +63,49 @@ class NebulaDockerPluginTest extends ProjectSpec {
         pushTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTestLatest' })
     }
 
+    def "createTasks allows for dockerRepo to be set to a closure and invokes the closure in that case"() {
+        def repoUrl = 'titan-registry.main.us-east-1.dynprod.netflix.net:7001'
+        def calls = 0
+        def fct = {
+            calls++
+            repoUrl
+        }
+        def x = new NebulaDockerPlugin()
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        project.configure(project) {
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.tasks.create 'buildImage'
+        project.nebulaDocker.dockerRepo = [test: fct]
+
+        when:
+        x.createTasks project, "Test"
+        def tagTest = project.tasks['dockerTagImageTest']
+        def pushTest = project.tasks['pushImageTest']
+        def tagTestLatest = project.tasks['dockerTagImageTestLatest']
+        def pushTestLatest = project.tasks['pushImageTestLatest']
+
+        then:
+        calls == 2 //one for current version and one for "latest"
+        tagTest
+        tagTest.dependsOn.size() == 2
+        tagTest.dependsOn.find({ it.hasProperty('name') && it.name == 'buildImage' })
+        tagTest.repository == repoUrl
+
+        pushTest
+        pushTest.dependsOn.size() == 2
+        pushTest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTest' })
+
+        tagTestLatest
+        tagTestLatest.dependsOn.size() == 2
+        tagTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'pushImageTest' })
+        tagTestLatest.repository == repoUrl
+
+        pushTestLatest
+        pushTestLatest.dependsOn.size() == 2
+        pushTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTestLatest' })
+    }
+
     def "createTasks uses the tagVersion closure if set"() {
         def calls = 0
         def repoUrl = 'titan-registry.main.us-east-1.dynprod.netflix.net:7001'

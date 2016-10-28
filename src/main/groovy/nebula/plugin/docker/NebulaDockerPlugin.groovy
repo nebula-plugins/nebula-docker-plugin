@@ -48,7 +48,11 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             project.tasks.create(name: "dockerTagImage${envir}${tags}", type: DockerTagImage) { task ->
                 dependsOn project.tasks[dependTaskName]
                 targetImageId { project.buildImage.imageId }
-                repository = nebulaDocker.dockerRepo[envir.toLowerCase()]
+                def repo = nebulaDocker.dockerRepo[envir.toLowerCase()]
+                if( repo instanceof Closure ){
+                    repo = repo()
+                }
+                repository = repo
                 task.conventionMapping.tag = { taggingVersion }
                 println "Using version $taggingVersion"
                 force = true
