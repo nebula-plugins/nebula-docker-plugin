@@ -16,7 +16,19 @@ There are a few other customizations the plugin offers -- see the section below 
 
 # Quick Start
 
-Simply apply the plugin in your `build.gradle`:
+Reference the plugin in your `buildscript` section:
+
+```
+buildscript {
+    repositories { jcenter() }
+
+    dependencies {
+        classpath "com.netflix.nebula:nebula-docker-plugin:latest.release"
+    }
+}
+```
+
+Note that you can use a specific version if you want rather than `latest.release`. Then simply apply the plugin in your `build.gradle`:
 
 ```
 apply plugin: 'nebula.docker'
