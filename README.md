@@ -10,7 +10,7 @@ To eliminate this issue, the plugin adds a symlink in the docker image : `appica
 
 Also, using the `gradle-docker-plugin` requires a lot of boilerplate code to customize the docker image (add files, symlinks, execute commands etc) -- this plugin handles all of that and allows for a simple closure to be defined to handle constructing the docker image.
 
-Tagging a docker image again requires boilerplat -- the `nebula.docker` plugin by default tags the docker image with the application version number _as well as_ `latest`. It also allows for a closure to be defined to set the tag/version of the docker image.
+Tagging a docker image again requires boilerplate -- the `nebula.docker` plugin by default tags the docker image with the application version number _as well as_ `latest`. It also allows for a closure to be defined to set the tag/version of the docker image.
 
 There are a few other customizations the plugin offers -- see the section below for more details on this.
 
