@@ -23,6 +23,7 @@ import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.artifacts.Configuration
 
 /**
  * Nebula plugin which simplifies the process of creating docker images, tagging and pushing them to repo.
@@ -111,12 +112,24 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
     }
 
     void apply(Project project) {
-        project.extensions.create("nebulaDocker", NebulaDockerExtension)
-        def nebulaDockerExt = project.nebulaDocker
-
+        project.configurations.create('nebulaDocker')
+                .setVisible(true)
+                .setTransitive(true)
+                .setDescription('The Nebula Docker libraries to be used for this project.')
+        Configuration config = project.configurations['nebulaDocker']
+        config.defaultDependencies { dependencies ->
+            dependencies.add(project.dependencies.create("com.bmuschko:gradle-docker-plugin:3.0.3"))
+            dependencies.add(project.dependencies.create("com.github.docker-java:docker-java:3.0.3"))
+            dependencies.add(project.dependencies.create('org.slf4j:slf4j-simple:1.7.5'))
+            dependencies.add(project.dependencies.create('cglib:cglib:3.2.0'))
+        }
         project.configure(project) {
             apply plugin: 'com.bmuschko.docker-java-application'
+            project.extensions['docker'].classpath = config
         }
+
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        def nebulaDockerExt = project.nebulaDocker
 
         project.afterEvaluate {
             assignDefaults project, nebulaDockerExt

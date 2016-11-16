@@ -23,7 +23,7 @@ plugins {
 apply plugin: 'groovy'
 
 dependencies {
-    compile group: 'com.bmuschko', name: 'gradle-docker-plugin', version: "$dockerVersion"
+    compile group: 'com.bmuschko', name: 'gradle-docker-plugin', version: "$bmushkoDockerVersion"
 }
 
 facets {
