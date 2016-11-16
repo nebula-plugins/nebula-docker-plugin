@@ -80,7 +80,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             entryPoint "${-> project.nebulaDocker.appDir}/bin/${project.applicationName}"
             if (project.nebulaDocker.dockerImage) {
                 project.nebulaDocker.dockerImage.delegate = task
-                project.nebulaDocker.dockerImage(project, task)
+                project.nebulaDocker.dockerImage(task)
             }
         }
     }

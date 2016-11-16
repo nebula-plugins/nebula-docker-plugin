@@ -237,7 +237,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.appDir = 'app directory'
         project.nebulaDocker.appDirLatest = 'latest directory'
         def calls = 0
-        project.nebulaDocker.dockerImage = { project, task ->
+        project.nebulaDocker.dockerImage = { task ->
             calls++
         }
 
