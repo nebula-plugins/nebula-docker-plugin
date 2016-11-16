@@ -10,13 +10,25 @@ To eliminate this issue, the plugin adds a symlink in the docker image : `appica
 
 Also, using the `gradle-docker-plugin` requires a lot of boilerplate code to customize the docker image (add files, symlinks, execute commands etc) -- this plugin handles all of that and allows for a simple closure to be defined to handle constructing the docker image.
 
-Tagging a docker image again requires boilerplat -- the `nebula.docker` plugin by default tags the docker image with the application version number _as well as_ `latest`. It also allows for a closure to be defined to set the tag/version of the docker image.
+Tagging a docker image again requires boilerplate -- the `nebula.docker` plugin by default tags the docker image with the application version number _as well as_ `latest`. It also allows for a closure to be defined to set the tag/version of the docker image.
 
 There are a few other customizations the plugin offers -- see the section below for more details on this.
 
 # Quick Start
 
-Simply apply the plugin in your `build.gradle`:
+Reference the plugin in your `buildscript` section:
+
+```
+buildscript {
+    repositories { jcenter() }
+
+    dependencies {
+        classpath "com.netflix.nebula:nebula-docker-plugin:latest.release"
+    }
+}
+```
+
+Note that you can use a specific version if you want rather than `latest.release`. Then simply apply the plugin in your `build.gradle`:
 
 ```
 apply plugin: 'nebula.docker'
@@ -62,7 +74,7 @@ where:
 | `dockerFile`      | String             | "./build/docker/Dockerfile"                      | Location of the `Dockerfile` in your build. If you have a handcrafted `Dockerfile` specify it here.               |
 | `appDir`          | String             | "/${project.applicationName}-${project.version}" | Directory in the docker image where your app will be unpacked.                                                    |
 | `appDirLatest`    | String             | "/${project.applicationName}-latest"             | Symlink directory which will be symlink to the `appDir` folder and be set to the entry point in the docker image. |
-| `dockerRepo`      | Map<String,String> | [test: "titan-registry.main.us-east-1.dyntest.netflix.net:7001/${project.group}/${project.applicationName}", prod: "titan-registry.main.us-east-1.dynprod.netflix.net:7001/${project.group}/${project.applicationName}"] | Map of environment to docker repository. This allows for the docker image to be deployed in different environments / repos. For instance, if you have a different docker repo for 'test' and 'prod' you can define this as `project.nebulaDocker.dockerRepo = [test: 'http://url.for.test/path', prod: 'https://url.prod:port/path']`. _Note_ that the keys of this map are used to generate `environments` property on the `project.nebulaDocker`. |
+| `dockerRepo`      | Map<String,String|Closure> | [test: "titan-registry.main.us-east-1.dyntest.netflix.net:7001/${project.group}/${project.applicationName}", prod: "titan-registry.main.us-east-1.dynprod.netflix.net:7001/${project.group}/${project.applicationName}"] | Map of environment to docker repository. The docker repository can be specified as a String **OR** as a closure. This allows for the docker image to be deployed in different environments / repos. For instance, if you have a different docker repo for 'test' and 'prod' you can define this as `project.nebulaDocker.dockerRepo = [test: 'http://url.for.test/path', prod: 'https://url.prod:port/path']`. If you supply a closure here, it will be invoked and the result of the closure is used as the repo url, as such ensure your closure returns a string. _Note_ that the keys of this map are used to generate `environments` property on the `project.nebulaDocker`. |
 | `dockerImage`     | Closure            | `null` (not set)                                 | Closure to execute when building the docker image. By default the code just creates the `appDir` directory and symlinks `appDirLatest` to it and sets the entry point to the shell script in `appDirLatest/bin`. If you need any other files or symlinks or commands to be executed, specify them here. |
 | `tagVersion`      | Closure<String>    | `{ "${project.version}" }`                       | Closure used to set the tag on the docker image. Typically the code will set 2 tags: one with the application version and one with <code>latest</code>. This closure allows you to define the tagging for the application version. |
 

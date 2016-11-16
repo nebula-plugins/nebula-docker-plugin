@@ -19,6 +19,7 @@ package nebula.plugin.docker
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import nebula.test.ProjectSpec
 import org.gradle.api.Task
+import org.gradle.api.artifacts.dsl.DependencyHandler
 
 /**
  * Unit test for {@link NebulaDockerPlugin}
@@ -44,6 +45,49 @@ class NebulaDockerPluginTest extends ProjectSpec {
         def pushTestLatest = project.tasks['pushImageTestLatest']
 
         then:
+        tagTest
+        tagTest.dependsOn.size() == 2
+        tagTest.dependsOn.find({ it.hasProperty('name') && it.name == 'buildImage' })
+        tagTest.repository == repoUrl
+
+        pushTest
+        pushTest.dependsOn.size() == 2
+        pushTest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTest' })
+
+        tagTestLatest
+        tagTestLatest.dependsOn.size() == 2
+        tagTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'pushImageTest' })
+        tagTestLatest.repository == repoUrl
+
+        pushTestLatest
+        pushTestLatest.dependsOn.size() == 2
+        pushTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTestLatest' })
+    }
+
+    def "createTasks allows for dockerRepo to be set to a closure and invokes the closure in that case"() {
+        def repoUrl = 'titan-registry.main.us-east-1.dynprod.netflix.net:7001'
+        def calls = 0
+        def fct = {
+            calls++
+            repoUrl
+        }
+        def x = new NebulaDockerPlugin()
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        project.configure(project) {
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.tasks.create 'buildImage'
+        project.nebulaDocker.dockerRepo = [test: fct]
+
+        when:
+        x.createTasks project, "Test"
+        def tagTest = project.tasks['dockerTagImageTest']
+        def pushTest = project.tasks['pushImageTest']
+        def tagTestLatest = project.tasks['dockerTagImageTestLatest']
+        def pushTestLatest = project.tasks['pushImageTestLatest']
+
+        then:
+        calls == 2 //one for current version and one for "latest"
         tagTest
         tagTest.dependsOn.size() == 2
         tagTest.dependsOn.find({ it.hasProperty('name') && it.name == 'buildImage' })
@@ -194,7 +238,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.appDir = 'app directory'
         project.nebulaDocker.appDirLatest = 'latest directory'
         def calls = 0
-        project.nebulaDocker.dockerImage = { project, task ->
+        project.nebulaDocker.dockerImage = { task ->
             calls++
         }
 
@@ -211,5 +255,20 @@ class NebulaDockerPluginTest extends ProjectSpec {
         task.instructions.find { it instanceof Dockerfile.RunCommandInstruction && it.command == "ln -s 'app directory' 'latest directory'" }
         task.instructions.find { it instanceof Dockerfile.EntryPointInstruction && it.command == ['app directory/bin/xyz'] }
         calls == 1
+    }
+
+    def "applying the plugin creates nebulaDocker configuration and assigns it to the docker.ext.classpath"() {
+        def x = new NebulaDockerPlugin()
+
+        when:
+        x.apply(project)
+
+        then:
+        project.configurations['nebulaDocker']
+        project.configurations['nebulaDocker'].visible
+        project.configurations['nebulaDocker'].transitive
+        project.extensions['docker']
+        project.extensions['docker'].classpath
+        //TODO: how to check the list of classpath?
     }
 }
