@@ -1,0 +1,162 @@
+{
+    "compile": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        }
+    },
+    "compileClasspath": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        }
+    },
+    "default": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        }
+    },
+    "functionalTestCompile": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "functionalTestCompileClasspath": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "functionalTestRuntime": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "functionalTestRuntimeClasspath": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "integTestCompile": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "integTestCompileClasspath": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "integTestRuntime": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "integTestRuntimeClasspath": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "jacocoAgent": {
+        "org.jacoco:org.jacoco.agent": {
+            "locked": "0.7.8"
+        }
+    },
+    "jacocoAnt": {
+        "org.jacoco:org.jacoco.ant": {
+            "locked": "0.7.8"
+        }
+    },
+    "runtime": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        }
+    },
+    "runtimeClasspath": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        }
+    },
+    "testCompile": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "testCompileClasspath": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "testRuntime": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    },
+    "testRuntimeClasspath": {
+        "com.bmuschko:gradle-docker-plugin": {
+            "locked": "3.0.3",
+            "requested": "3.0.3"
+        },
+        "com.netflix.nebula:nebula-test": {
+            "locked": "6.0.0",
+            "requested": "6.0.0"
+        }
+    }
+}
