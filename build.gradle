@@ -16,14 +16,13 @@
  */
 
 plugins {
-    id 'com.gradle.plugin-publish' version '0.9.6'
-    id 'nebula.plugin-plugin' version '4.24.2'
+    id 'nebula.plugin-plugin' version '5.14.0'
 }
 
 apply plugin: 'groovy'
 
 dependencies {
-    compile group: 'com.bmuschko', name: 'gradle-docker-plugin', version: "$dockerVersion"
+    compile group: 'com.bmuschko', name: 'gradle-docker-plugin', version: "$bmushkoDockerVersion"
 }
 
 facets {
