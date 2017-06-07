@@ -19,6 +19,7 @@ package nebula.plugin.docker
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import nebula.test.ProjectSpec
 import org.gradle.api.Task
+import org.gradle.api.artifacts.dsl.DependencyHandler
 
 /**
  * Unit test for {@link NebulaDockerPlugin}
@@ -237,7 +238,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.appDir = 'app directory'
         project.nebulaDocker.appDirLatest = 'latest directory'
         def calls = 0
-        project.nebulaDocker.dockerImage = { project, task ->
+        project.nebulaDocker.dockerImage = { task ->
             calls++
         }
 
@@ -254,5 +255,20 @@ class NebulaDockerPluginTest extends ProjectSpec {
         task.instructions.find { it instanceof Dockerfile.RunCommandInstruction && it.command == "ln -s 'app directory' 'latest directory'" }
         task.instructions.find { it instanceof Dockerfile.EntryPointInstruction && it.command == ['app directory/bin/xyz'] }
         calls == 1
+    }
+
+    def "applying the plugin creates nebulaDocker configuration and assigns it to the docker.ext.classpath"() {
+        def x = new NebulaDockerPlugin()
+
+        when:
+        x.apply(project)
+
+        then:
+        project.configurations['nebulaDocker']
+        project.configurations['nebulaDocker'].visible
+        project.configurations['nebulaDocker'].transitive
+        project.extensions['docker']
+        project.extensions['docker'].classpath
+        //TODO: how to check the list of classpath?
     }
 }
