@@ -1,100 +1,100 @@
 {
     "compile": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         }
     },
     "compileClasspath": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         }
     },
     "default": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         }
     },
     "functionalTestCompile": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "functionalTestCompileClasspath": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "functionalTestRuntime": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "functionalTestRuntimeClasspath": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "integTestCompile": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "integTestCompileClasspath": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "integTestRuntime": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "integTestRuntimeClasspath": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "jacocoAgent": {
@@ -109,54 +109,54 @@
     },
     "runtime": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         }
     },
     "runtimeClasspath": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         }
     },
     "testCompile": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "testCompileClasspath": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "testRuntime": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     },
     "testRuntimeClasspath": {
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.0.3",
-            "requested": "3.0.3"
+            "locked": "3.0.12",
+            "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.0.1",
-            "requested": "6.0.1"
+            "locked": "6.1.0",
+            "requested": "6.+"
         }
     }
 }
