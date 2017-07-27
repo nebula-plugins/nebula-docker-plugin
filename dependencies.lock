@@ -23,7 +23,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -33,7 +33,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -43,7 +43,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -53,7 +53,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -63,7 +63,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -73,7 +73,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -83,7 +83,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -93,7 +93,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -125,7 +125,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -135,7 +135,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -145,7 +145,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     },
@@ -155,7 +155,7 @@
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "6.1.1",
+            "locked": "6.1.2",
             "requested": "6.+"
         }
     }
