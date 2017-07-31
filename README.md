@@ -1,7 +1,5 @@
 # Nebula Docker Plugin
 
-# Gradle Java Cross-Compile Plugin
-
 ![Support Status](https://img.shields.io/badge/nebula-supported-brightgreen.svg)
 [![Build Status](https://travis-ci.org/nebula-plugins/nebula-docker-plugin.svg?branch=master)](https://travis-ci.org/nebula-plugins/nebula-docker-plugin)
 [![Coverage Status](https://coveralls.io/repos/nebula-plugins/nebula-docker-plugin/badge.svg?branch=master&service=github)](https://coveralls.io/github/nebula-plugins/nebula-docker-plugin?branch=master)
