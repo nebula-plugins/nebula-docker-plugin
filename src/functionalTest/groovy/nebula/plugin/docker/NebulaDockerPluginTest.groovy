@@ -46,21 +46,17 @@ class NebulaDockerPluginTest extends ProjectSpec {
 
         then:
         tagTest
-        tagTest.dependsOn.size() == 2
         tagTest.dependsOn.find({ it.hasProperty('name') && it.name == 'buildImage' })
         tagTest.repository == repoUrl
 
         pushTest
-        pushTest.dependsOn.size() == 2
         pushTest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTest' })
 
         tagTestLatest
-        tagTestLatest.dependsOn.size() == 2
         tagTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'pushImageTest' })
         tagTestLatest.repository == repoUrl
 
         pushTestLatest
-        pushTestLatest.dependsOn.size() == 2
         pushTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTestLatest' })
     }
 
@@ -89,21 +85,17 @@ class NebulaDockerPluginTest extends ProjectSpec {
         then:
         calls == 2 //one for current version and one for "latest"
         tagTest
-        tagTest.dependsOn.size() == 2
         tagTest.dependsOn.find({ it.hasProperty('name') && it.name == 'buildImage' })
         tagTest.repository == repoUrl
 
         pushTest
-        pushTest.dependsOn.size() == 2
         pushTest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTest' })
 
         tagTestLatest
-        tagTestLatest.dependsOn.size() == 2
         tagTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'pushImageTest' })
         tagTestLatest.repository == repoUrl
 
         pushTestLatest
-        pushTestLatest.dependsOn.size() == 2
         pushTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTestLatest' })
     }
 
@@ -160,7 +152,6 @@ class NebulaDockerPluginTest extends ProjectSpec {
         def task = project.tasks['buildImage']
 
         then:
-        task.dependsOn.size() == 2
         task.dependsOn.find({ it.hasProperty('name') && it.name == 'createDockerfile' })
         task.inputDir.is(mockParent)
     }
@@ -184,7 +175,6 @@ class NebulaDockerPluginTest extends ProjectSpec {
         1 * x.createTasks(project, 'Test') >> {}
         1 * x.createTasks(project, 'Prod') >> {}
         1 * x.createTasks(project, 'Dev') >> {}
-        task.dependsOn.size() == 2
         def dpp = task.dependsOn.find({ it instanceof List })
         dpp.size() == 3
         dpp.find({ it.name == 'pushImageTestLatest' })
