@@ -261,4 +261,62 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.extensions['docker'].classpath
         //TODO: how to check the list of classpath?
     }
+
+    def "enabling repoAuth and setting the username password and email on docker.registryCredentials"() {
+
+        def x = new NebulaDockerPlugin()
+        x.apply(project)
+        project.configure(project) {
+            apply plugin: 'application'
+            apply plugin: 'distribution'
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.applicationName = 'xyz'
+        project.nebulaDocker.dockerFile = 'some docker file'
+        project.nebulaDocker.dockerBase = 'base docker'
+        project.nebulaDocker.maintainerEmail = 'some email'
+        project.nebulaDocker.appDir = 'app directory'
+        project.nebulaDocker.appDirLatest = 'latest directory'
+
+        project.nebulaDocker.dockerRepoAuth = true
+        project.nebulaDocker.dockerRepoUsername = "username"
+        project.nebulaDocker.dockerRepoPassword = "password"
+        project.nebulaDocker.dockerRepoEmail = "joe@bloggs.com"
+
+        when: "triggering a project.evaluate"
+        project.getTasksByName("tasks", false)
+
+        then: "the configurations should be passed through to docker-java-application"
+        project.extensions['docker']
+        project.extensions['docker'].registryCredentials
+        project.extensions['docker'].registryCredentials.username == "username"
+        project.extensions['docker'].registryCredentials.password == "password"
+        project.extensions['docker'].registryCredentials.email == "joe@bloggs.com"
+
+    }
+
+    def "when repoAuth is not explicitly enabled then docker.registryCredentials is not populated"() {
+
+        def x = new NebulaDockerPlugin()
+        x.apply(project)
+        project.configure(project) {
+            apply plugin: 'application'
+            apply plugin: 'distribution'
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.applicationName = 'xyz'
+        project.nebulaDocker.dockerFile = 'some docker file'
+        project.nebulaDocker.dockerBase = 'base docker'
+        project.nebulaDocker.maintainerEmail = 'some email'
+        project.nebulaDocker.appDir = 'app directory'
+        project.nebulaDocker.appDirLatest = 'latest directory'
+
+        when: "triggering a project.evaluate"
+        project.getTasksByName("tasks", false)
+
+        then: "dockerRepoAuth should be false, and registryCredentials should be null"
+        !project.nebulaDocker.dockerRepoAuth
+        project.extensions['docker']
+        !project.extensions['docker'].registryCredentials
+    }
 }

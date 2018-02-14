@@ -90,6 +90,27 @@ class NebulaDockerExtension {
     def Closure<String> tagVersion
 
     /**
+     * This is a simple flag to indicate whether or not to add registryCredentials to the underlying docker extension
+     * for specifying user credentials (default is false)
+     */
+    def boolean dockerRepoAuth
+
+    /**
+     * The registry username (default is null)
+     */
+    def String dockerRepoUsername
+
+    /**
+     * The registry password (default is null)
+     */
+    def String dockerRepoPassword
+
+    /**
+     * The registry email address (default is null)
+     */
+    def String dockerRepoEmail
+
+    /**
      * Defines a property which returns all the environments defined in the {@link #dockerRepo}.
      * This is basically a set of all the keys present in the {@link #dockerRepo} set.
      *

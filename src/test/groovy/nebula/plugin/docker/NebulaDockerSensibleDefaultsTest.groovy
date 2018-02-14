@@ -49,5 +49,9 @@ class NebulaDockerSensibleDefaultsTest extends Specification {
         ext.dockerFile == x.DEF_DOCKER_FILE
         ext.appDirLatest == "/${appName}-latest"
         ext.appDir == "/${appName}-1.2.3"
+        !ext.dockerRepoAuth
+        ext.dockerRepoUsername == null
+        ext.dockerRepoPassword == null
+        ext.dockerRepoEmail == null
     }
 }
