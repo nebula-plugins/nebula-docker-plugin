@@ -46,21 +46,17 @@ class NebulaDockerPluginTest extends ProjectSpec {
 
         then:
         tagTest
-        tagTest.dependsOn.size() == 2
         tagTest.dependsOn.find({ it.hasProperty('name') && it.name == 'buildImage' })
         tagTest.repository == repoUrl
 
         pushTest
-        pushTest.dependsOn.size() == 2
         pushTest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTest' })
 
         tagTestLatest
-        tagTestLatest.dependsOn.size() == 2
         tagTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'pushImageTest' })
         tagTestLatest.repository == repoUrl
 
         pushTestLatest
-        pushTestLatest.dependsOn.size() == 2
         pushTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTestLatest' })
     }
 
@@ -89,21 +85,17 @@ class NebulaDockerPluginTest extends ProjectSpec {
         then:
         calls == 2 //one for current version and one for "latest"
         tagTest
-        tagTest.dependsOn.size() == 2
         tagTest.dependsOn.find({ it.hasProperty('name') && it.name == 'buildImage' })
         tagTest.repository == repoUrl
 
         pushTest
-        pushTest.dependsOn.size() == 2
         pushTest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTest' })
 
         tagTestLatest
-        tagTestLatest.dependsOn.size() == 2
         tagTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'pushImageTest' })
         tagTestLatest.repository == repoUrl
 
         pushTestLatest
-        pushTestLatest.dependsOn.size() == 2
         pushTestLatest.dependsOn.find({ it.hasProperty('name') && it.name == 'dockerTagImageTestLatest' })
     }
 
@@ -160,7 +152,6 @@ class NebulaDockerPluginTest extends ProjectSpec {
         def task = project.tasks['buildImage']
 
         then:
-        task.dependsOn.size() == 2
         task.dependsOn.find({ it.hasProperty('name') && it.name == 'createDockerfile' })
         task.inputDir.is(mockParent)
     }
@@ -184,7 +175,6 @@ class NebulaDockerPluginTest extends ProjectSpec {
         1 * x.createTasks(project, 'Test') >> {}
         1 * x.createTasks(project, 'Prod') >> {}
         1 * x.createTasks(project, 'Dev') >> {}
-        task.dependsOn.size() == 2
         def dpp = task.dependsOn.find({ it instanceof List })
         dpp.size() == 3
         dpp.find({ it.name == 'pushImageTestLatest' })
@@ -270,5 +260,63 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.extensions['docker']
         project.extensions['docker'].classpath
         //TODO: how to check the list of classpath?
+    }
+
+    def "enabling repoAuth and setting the username password and email on docker.registryCredentials"() {
+
+        def x = new NebulaDockerPlugin()
+        x.apply(project)
+        project.configure(project) {
+            apply plugin: 'application'
+            apply plugin: 'distribution'
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.applicationName = 'xyz'
+        project.nebulaDocker.dockerFile = 'some docker file'
+        project.nebulaDocker.dockerBase = 'base docker'
+        project.nebulaDocker.maintainerEmail = 'some email'
+        project.nebulaDocker.appDir = 'app directory'
+        project.nebulaDocker.appDirLatest = 'latest directory'
+
+        project.nebulaDocker.dockerRepoAuth = true
+        project.nebulaDocker.dockerRepoUsername = "username"
+        project.nebulaDocker.dockerRepoPassword = "password"
+        project.nebulaDocker.dockerRepoEmail = "joe@bloggs.com"
+
+        when: "triggering a project.evaluate"
+        project.getTasksByName("tasks", false)
+
+        then: "the configurations should be passed through to docker-java-application"
+        project.extensions['docker']
+        project.extensions['docker'].registryCredentials
+        project.extensions['docker'].registryCredentials.username == "username"
+        project.extensions['docker'].registryCredentials.password == "password"
+        project.extensions['docker'].registryCredentials.email == "joe@bloggs.com"
+
+    }
+
+    def "when repoAuth is not explicitly enabled then docker.registryCredentials is not populated"() {
+
+        def x = new NebulaDockerPlugin()
+        x.apply(project)
+        project.configure(project) {
+            apply plugin: 'application'
+            apply plugin: 'distribution'
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.applicationName = 'xyz'
+        project.nebulaDocker.dockerFile = 'some docker file'
+        project.nebulaDocker.dockerBase = 'base docker'
+        project.nebulaDocker.maintainerEmail = 'some email'
+        project.nebulaDocker.appDir = 'app directory'
+        project.nebulaDocker.appDirLatest = 'latest directory'
+
+        when: "triggering a project.evaluate"
+        project.getTasksByName("tasks", false)
+
+        then: "dockerRepoAuth should be false, and registryCredentials should be null"
+        !project.nebulaDocker.dockerRepoAuth
+        project.extensions['docker']
+        !project.extensions['docker'].registryCredentials
     }
 }
