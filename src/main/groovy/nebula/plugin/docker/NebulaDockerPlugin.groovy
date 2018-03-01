@@ -139,6 +139,14 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
                     baseImage = nebulaDockerExt.dockerBase
                     maintainer = nebulaDockerExt.maintainerEmail
                 }
+
+                if(nebulaDockerExt.dockerRepoAuth) {
+                    registryCredentials {
+                        username = nebulaDockerExt.dockerRepoUsername
+                        password = nebulaDockerExt.dockerRepoPassword
+                        email = nebulaDockerExt.dockerRepoEmail
+                    }
+                }
             }
 
             createAllTasks project
