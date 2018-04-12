@@ -19,6 +19,9 @@ plugins {
     id 'nebula.plugin-plugin' version '6.1.1'
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     compile 'com.bmuschko:gradle-docker-plugin:3.+'
 }
