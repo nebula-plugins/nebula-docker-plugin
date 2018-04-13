@@ -118,10 +118,10 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
                 .setDescription('The Nebula Docker libraries to be used for this project.')
         Configuration config = project.configurations['nebulaDocker']
         config.defaultDependencies { dependencies ->
-            dependencies.add(project.dependencies.create("com.bmuschko:gradle-docker-plugin:3.0.3"))
-            dependencies.add(project.dependencies.create("com.github.docker-java:docker-java:3.0.3"))
-            dependencies.add(project.dependencies.create('org.slf4j:slf4j-simple:1.7.5'))
-            dependencies.add(project.dependencies.create('cglib:cglib:3.2.0'))
+            dependencies.add(project.dependencies.create("com.bmuschko:gradle-docker-plugin:3.2.4"))
+            dependencies.add(project.dependencies.create("com.github.docker-java:docker-java:3.0.14"))
+            dependencies.add(project.dependencies.create('org.slf4j:slf4j-simple:1.7.25'))
+            dependencies.add(project.dependencies.create('cglib:cglib:3.2.6'))
         }
         project.configure(project) {
             apply plugin: 'com.bmuschko.docker-java-application'
