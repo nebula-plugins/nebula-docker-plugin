@@ -32,4 +32,10 @@ trait Strings {
         if (!s) return s
         s.toLowerCase().capitalize()
     }
+
+    String parentOf(String directory) {
+        if (!directory) return directory
+        def file = new File(directory)
+        file.parent ?: directory
+    }
 }
