@@ -31,6 +31,8 @@ import org.gradle.api.artifacts.Configuration
  * @author ltudor
  */
 class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensibleDefaults {
+    final String DOCKER_BUILD_DIR = "build/docker/app-lib"
+
     protected void createTasks(Project project, String envir) {
         NebulaDockerExtension nebulaDocker = project.nebulaDocker
 
@@ -75,7 +77,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             from "${project.nebulaDocker.dockerBase}"
             maintainer project.nebulaDocker.maintainerEmail
 
-            addFile "${project.distTar.archiveName}", '/'
+            addFile "${project.distTar.archiveName}", "${DOCKER_BUILD_DIR}/"
             runCommand "ln -s '${-> project.nebulaDocker.appDir}' '${project.nebulaDocker.appDirLatest}'"
             entryPoint "${-> project.nebulaDocker.appDir}/bin/${project.applicationName}"
             if (project.nebulaDocker.dockerImage) {
@@ -118,7 +120,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
                 .setDescription('The Nebula Docker libraries to be used for this project.')
         Configuration config = project.configurations['nebulaDocker']
         config.defaultDependencies { dependencies ->
-            dependencies.add(project.dependencies.create("com.bmuschko:gradle-docker-plugin:3.2.4"))
+            dependencies.add(project.dependencies.create("com.bmuschko:gradle-docker-plugin:3.6.0"))
             dependencies.add(project.dependencies.create("com.github.docker-java:docker-java:3.0.14"))
             dependencies.add(project.dependencies.create('org.slf4j:slf4j-simple:1.7.25'))
             dependencies.add(project.dependencies.create('cglib:cglib:3.2.6'))

@@ -30,7 +30,7 @@ trait NebulaDockerSensibleDefaults {
     final String TITAN_PROD = "titan-registry.main.us-east-1.dynprod.netflix.net:7002"
     final String DOCKER_URL_LOCALHOST = "http://localhost:4243"
     final String DOCKER_BASE_OPEN_JRE = "java:openjdk-8-jre"
-    final String DEF_DOCKER_FILE = "./build/docker/Dockerfile"
+    final String DEF_DOCKER_FILE = "./build/docker/app-lib/Dockerfile"
 
     /**
      * Sets the default values for the execution of the plugin, where not set.
