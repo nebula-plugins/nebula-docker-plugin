@@ -121,7 +121,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
         Configuration config = project.configurations['nebulaDocker']
         config.defaultDependencies { dependencies ->
             dependencies.add(project.dependencies.create("com.bmuschko:gradle-docker-plugin:3.6.0"))
-            dependencies.add(project.dependencies.create("com.aries:docker-java-shaded:3.1.0-rc.3:cglib@jar"){
+            dependencies.add(project.dependencies.create("com.aries:docker-java-shaded:3.1.0-rc.2:cglib@jar"){
                 transitive = false
             })
             dependencies.add(project.dependencies.create('org.slf4j:slf4j-simple:1.7.5'))
