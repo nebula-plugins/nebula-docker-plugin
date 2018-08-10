@@ -99,14 +99,12 @@
     },
     "jacocoAgent": {
         "org.jacoco:org.jacoco.agent": {
-            "locked": "0.7.9",
-            "requested": "0.7.9"
+            "locked": "0.8.1"
         }
     },
     "jacocoAnt": {
         "org.jacoco:org.jacoco.ant": {
-            "locked": "0.7.9",
-            "requested": "0.7.9"
+            "locked": "0.8.1"
         }
     },
     "runtime": {
