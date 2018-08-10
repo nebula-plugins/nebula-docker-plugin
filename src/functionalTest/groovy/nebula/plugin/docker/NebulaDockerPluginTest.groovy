@@ -37,7 +37,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.dockerRepo = [test: repoUrl]
 
         when:
-        x.createTasks project, "Test"
+        x.createTasks project, "test"
         def tagTest = project.tasks['dockerTagImageTest']
         def pushTest = project.tasks['pushImageTest']
         def tagTestLatest = project.tasks['dockerTagImageTestLatest']
@@ -75,7 +75,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.dockerRepo = [test: fct]
 
         when:
-        x.createTasks project, "Test"
+        x.createTasks project, "test"
         def tagTest = project.tasks['dockerTagImageTest']
         def pushTest = project.tasks['pushImageTest']
         def tagTestLatest = project.tasks['dockerTagImageTestLatest']
