@@ -104,8 +104,9 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
     protected Task taskPushAllImages(Project project) {
         List<Task> taskArr = []
         project.nebulaDocker.environments.each { envir ->
+            def capitalizedEnvir = lowerCaseCapitalize(envir)
             createTasks project, envir
-            taskArr << project.tasks["pushImage${envir}Latest"]
+            taskArr << project.tasks["pushImage${capitalizedEnvir}Latest"]
         }
 
         project.tasks.create(name: 'pushAllImages') {
