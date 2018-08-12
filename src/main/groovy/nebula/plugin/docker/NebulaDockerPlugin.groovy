@@ -34,9 +34,10 @@ import org.gradle.api.tasks.Sync
 class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensibleDefaults {
     protected void createTasks(Project project, String envir) {
         NebulaDockerExtension nebulaDocker = project.nebulaDocker
+        def capitalizedEnvir = lowerCaseCapitalize(envir)
 
         ["", "Latest"].each { tags ->
-            String dependTaskName = (!tags) ? "buildImage" : "pushImage${envir}"
+            String dependTaskName = (!tags) ? "buildImage" : "pushImage${capitalizedEnvir}"
             String taggingVersion = "latest"
             if (!tags) {
                 if (nebulaDocker.tagVersion) {
@@ -47,10 +48,10 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
                 }
             }
 
-            project.tasks.create(name: "dockerTagImage${envir}${tags}", type: DockerTagImage) { task ->
+            project.tasks.create(name: "dockerTagImage${capitalizedEnvir}${tags}", type: DockerTagImage) { task ->
                 dependsOn project.tasks[dependTaskName]
                 targetImageId { project.buildImage.imageId }
-                def repo = nebulaDocker.dockerRepo[envir.toLowerCase()]
+                def repo = nebulaDocker.dockerRepo[envir]
                 if( repo instanceof Closure ){
                     repo = repo()
                 }
@@ -60,10 +61,10 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
                 force = true
             }
 
-            project.tasks.create(name: "pushImage${envir}${tags}", type: DockerPushImage) { task ->
-                dependsOn project.tasks["dockerTagImage${envir}${tags}"]
-                task.conventionMapping.imageName = { project.tasks["dockerTagImage${envir}${tags}"].getRepository() }
-                task.conventionMapping.tag = { project.tasks["dockerTagImage${envir}${tags}"].getTag() }
+            project.tasks.create(name: "pushImage${capitalizedEnvir}${tags}", type: DockerPushImage) { task ->
+                dependsOn project.tasks["dockerTagImage${capitalizedEnvir}${tags}"]
+                task.conventionMapping.imageName = { project.tasks["dockerTagImage${capitalizedEnvir}${tags}"].getRepository() }
+                task.conventionMapping.tag = { project.tasks["dockerTagImage${capitalizedEnvir}${tags}"].getTag() }
             }
         }
     }
@@ -103,7 +104,6 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
     protected Task taskPushAllImages(Project project) {
         List<Task> taskArr = []
         project.nebulaDocker.environments.each { envir ->
-            envir = lowerCaseCapitalize(envir)
             createTasks project, envir
             taskArr << project.tasks["pushImage${envir}Latest"]
         }
