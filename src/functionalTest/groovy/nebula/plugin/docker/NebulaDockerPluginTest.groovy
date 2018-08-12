@@ -20,7 +20,6 @@ import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import nebula.test.ProjectSpec
 import org.gradle.api.Task
 import org.gradle.api.tasks.Sync
-import spock.lang.Ignore
 
 /**
  * Unit test for {@link NebulaDockerPlugin}
@@ -39,7 +38,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.dockerRepo = [test: repoUrl]
 
         when:
-        x.createTasks project, "Test"
+        x.createTasks project, "test"
         def tagTest = project.tasks['dockerTagImageTest']
         def pushTest = project.tasks['pushImageTest']
         def tagTestLatest = project.tasks['dockerTagImageTestLatest']
@@ -77,7 +76,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.dockerRepo = [test: fct]
 
         when:
-        x.createTasks project, "Test"
+        x.createTasks project, "test"
         def tagTest = project.tasks['dockerTagImageTest']
         def pushTest = project.tasks['pushImageTest']
         def tagTestLatest = project.tasks['dockerTagImageTestLatest']
@@ -164,24 +163,24 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.configure(project) {
             apply plugin: 'com.bmuschko.docker-java-application'
         }
-        project.nebulaDocker.dockerRepo = [test: 'abc', prod: 'xyz', 'dev': '123']
+        project.nebulaDocker.dockerRepo = [test: 'abc', PROD: 'xyz', 'devEnv': '123']
         project.tasks.create 'pushImageTestLatest'
         project.tasks.create 'pushImageProdLatest'
-        project.tasks.create 'pushImageDevLatest'
+        project.tasks.create 'pushImageDevenvLatest'
 
         when:
         x.taskPushAllImages project
         def task = project.tasks['pushAllImages']
 
         then:
-        1 * x.createTasks(project, 'Test') >> {}
-        1 * x.createTasks(project, 'Prod') >> {}
-        1 * x.createTasks(project, 'Dev') >> {}
+        1 * x.createTasks(project, 'test') >> {}
+        1 * x.createTasks(project, 'PROD') >> {}
+        1 * x.createTasks(project, 'devEnv') >> {}
         def dpp = task.dependsOn.find({ it instanceof List })
         dpp.size() == 3
         dpp.find({ it.name == 'pushImageTestLatest' })
         dpp.find({ it.name == 'pushImageProdLatest' })
-        dpp.find({ it.name == 'pushImageDevLatest' })
+        dpp.find({ it.name == 'pushImageDevenvLatest' })
     }
 
     def "taskCreateDockerfile uses the property from NebulaDockerExtension and sets entry point and sets up right dependencies"() {
@@ -209,7 +208,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         task.dependsOn.find { (it instanceof Task) && (it.name == 'nebulaDockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { (it instanceof Dockerfile.FromInstruction) && (it.build() == 'FROM base docker') }
-        task.instructions.find { (it instanceof Dockerfile.MaintainerInstruction) && (it.build() == 'MAINTAINER some email') }
+        task.instructions.find { (it instanceof Dockerfile.LabelInstruction) && (it.build() == 'LABEL maintainer="some email"') }
         task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar /") }
         task.instructions.find { (it instanceof Dockerfile.RunCommandInstruction) &&(it.build() == "RUN ln -s 'app directory' 'latest directory'") }
         task.instructions.find { (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]") }
@@ -230,9 +229,9 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.maintainerEmail = 'some email'
         project.nebulaDocker.appDir = 'app directory'
         project.nebulaDocker.appDirLatest = 'latest directory'
-        def calls = 0
+        def called = 0
         project.nebulaDocker.dockerImage = { task ->
-            calls++
+            called++
         }
         project.tasks.create('nebulaDockerCopyDistResources', Sync)
 
@@ -243,11 +242,11 @@ class NebulaDockerPluginTest extends ProjectSpec {
         task.dependsOn.find { (it instanceof Task) && (it.name == 'nebulaDockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { (it instanceof Dockerfile.FromInstruction) && (it.build() == 'FROM base docker') }
-        task.instructions.find { (it instanceof Dockerfile.MaintainerInstruction) && (it.build() == 'MAINTAINER some email') }
+        task.instructions.find { (it instanceof Dockerfile.LabelInstruction) && (it.build() == 'LABEL maintainer="some email"') }
         task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar /") }
         task.instructions.find { (it instanceof Dockerfile.RunCommandInstruction) &&(it.build() == "RUN ln -s 'app directory' 'latest directory'") }
         task.instructions.find { (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]") }
-        calls == 1
+        called == 1
     }
 
     def "applying the plugin creates nebulaDocker configuration and assigns it to the docker.ext.classpath"() {
