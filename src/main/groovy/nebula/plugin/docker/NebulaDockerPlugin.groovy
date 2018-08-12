@@ -24,6 +24,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.tasks.Sync
 
 /**
  * Nebula plugin which simplifies the process of creating docker images, tagging and pushing them to repo.
@@ -31,8 +32,6 @@ import org.gradle.api.artifacts.Configuration
  * @author ltudor
  */
 class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensibleDefaults {
-    final String DOCKER_BUILD_DIR = "build/docker/app-lib"
-
     protected void createTasks(Project project, String envir) {
         NebulaDockerExtension nebulaDocker = project.nebulaDocker
 
@@ -72,18 +71,25 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
     protected Task taskCreateDockerfile(Project project) {
         project.tasks.create(name: 'createDockerfile', type: Dockerfile) { task ->
             destFile = project.file(project.nebulaDocker.dockerFile)
-            dependsOn project.tasks['distTar']
-            dependsOn project.tasks['dockerCopyDistResources']
+            dependsOn project.tasks['nebulaDockerCopyDistResources']
             from "${project.nebulaDocker.dockerBase}"
             maintainer project.nebulaDocker.maintainerEmail
 
-            addFile "${project.distTar.archiveName}", "${DOCKER_BUILD_DIR}/"
+            addFile "${project.distTar.archiveName}", "/"
             runCommand "ln -s '${-> project.nebulaDocker.appDir}' '${project.nebulaDocker.appDirLatest}'"
             entryPoint "${-> project.nebulaDocker.appDir}/bin/${project.applicationName}"
             if (project.nebulaDocker.dockerImage) {
                 project.nebulaDocker.dockerImage.delegate = task
                 project.nebulaDocker.dockerImage(task)
             }
+        }
+    }
+
+    protected Task taskCopyDistResources(Project project) {
+        project.tasks.create(name: 'nebulaDockerCopyDistResources', type: Sync) { task ->
+            dependsOn project.tasks['dockerCopyDistResources']
+            from "build/distributions/${project.distTar.archiveName}"
+            into "build/docker/app-lib"
         }
     }
 
@@ -108,6 +114,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
     }
 
     protected void createAllTasks(Project project) {
+        taskCopyDistResources project
         taskCreateDockerfile project
         taskBuildImage project
         taskPushAllImages project

@@ -19,6 +19,8 @@ package nebula.plugin.docker
 import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import nebula.test.ProjectSpec
 import org.gradle.api.Task
+import org.gradle.api.tasks.Sync
+import spock.lang.Ignore
 
 /**
  * Unit test for {@link NebulaDockerPlugin}
@@ -119,13 +121,14 @@ class NebulaDockerPluginTest extends ProjectSpec {
         calls == 1
     }
 
-    def "createAllTasks creates the dockerfile task, buildImage and pushAllImages"() {
+    def "createAllTasks creates the resource copy task, dockerfile task, buildImage and pushAllImages"() {
         def x = Spy(NebulaDockerPlugin)
 
         when:
         x.createAllTasks project
 
         then:
+        1 * x.taskCopyDistResources(project) >> {}
         1 * x.taskCreateDockerfile(project) >> {}
         1 * x.taskBuildImage(project) >> {}
         1 * x.taskPushAllImages(project) >> {}
@@ -197,16 +200,17 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.appDir = 'app directory'
         project.nebulaDocker.appDirLatest = 'latest directory'
 
+        project.tasks.create('nebulaDockerCopyDistResources', Sync)
+
         when:
         def task = x.taskCreateDockerfile(project)
 
         then:
-        task.dependsOn.find { (it instanceof Task) && (it.name == 'distTar') }
-        task.dependsOn.find { (it instanceof Task) && (it.name == 'dockerCopyDistResources') }
+        task.dependsOn.find { (it instanceof Task) && (it.name == 'nebulaDockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { (it instanceof Dockerfile.FromInstruction) && (it.build() == 'FROM base docker') }
         task.instructions.find { (it instanceof Dockerfile.MaintainerInstruction) && (it.build() == 'MAINTAINER some email') }
-        task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar build/docker/app-lib/") }
+        task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar /") }
         task.instructions.find { (it instanceof Dockerfile.RunCommandInstruction) &&(it.build() == "RUN ln -s 'app directory' 'latest directory'") }
         task.instructions.find { (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]") }
     }
@@ -230,17 +234,17 @@ class NebulaDockerPluginTest extends ProjectSpec {
         project.nebulaDocker.dockerImage = { task ->
             calls++
         }
+        project.tasks.create('nebulaDockerCopyDistResources', Sync)
 
         when:
         def task = x.taskCreateDockerfile(project)
 
         then:
-        task.dependsOn.find { (it instanceof Task) && (it.name == 'distTar') }
-        task.dependsOn.find { (it instanceof Task) && (it.name == 'dockerCopyDistResources') }
+        task.dependsOn.find { (it instanceof Task) && (it.name == 'nebulaDockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { (it instanceof Dockerfile.FromInstruction) && (it.build() == 'FROM base docker') }
         task.instructions.find { (it instanceof Dockerfile.MaintainerInstruction) && (it.build() == 'MAINTAINER some email') }
-        task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar build/docker/app-lib/") }
+        task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar /") }
         task.instructions.find { (it instanceof Dockerfile.RunCommandInstruction) &&(it.build() == "RUN ln -s 'app directory' 'latest directory'") }
         task.instructions.find { (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]") }
         calls == 1
