@@ -24,9 +24,7 @@ targetCompatibility = 1.8
 
 dependencies {
     compile 'com.bmuschko:gradle-docker-plugin:3.+'
-    compile 'com.aries:docker-java-shaded:3.0.14'
-    compile 'cglib:cglib-nodep:3.2.7'
-
+    compile 'com.aries:docker-java-shaded:3.1.0-rc-3:cglib@jar'
 }
 
 facets {

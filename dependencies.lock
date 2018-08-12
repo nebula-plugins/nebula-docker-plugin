@@ -1,12 +1,8 @@
 {
     "compile": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -14,13 +10,9 @@
         }
     },
     "compileClasspath": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -28,13 +20,9 @@
         }
     },
     "default": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -42,13 +30,9 @@
         }
     },
     "functionalTestCompile": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -60,13 +44,9 @@
         }
     },
     "functionalTestCompileClasspath": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -78,13 +58,9 @@
         }
     },
     "functionalTestRuntime": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -96,13 +72,9 @@
         }
     },
     "functionalTestRuntimeClasspath": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -114,13 +86,9 @@
         }
     },
     "integTestCompile": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -132,13 +100,9 @@
         }
     },
     "integTestCompileClasspath": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -150,13 +114,9 @@
         }
     },
     "integTestRuntime": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -168,13 +128,9 @@
         }
     },
     "integTestRuntimeClasspath": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -196,13 +152,9 @@
         }
     },
     "runtime": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -210,13 +162,9 @@
         }
     },
     "runtimeClasspath": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -224,13 +172,9 @@
         }
     },
     "testCompile": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -242,13 +186,9 @@
         }
     },
     "testCompileClasspath": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -260,13 +200,9 @@
         }
     },
     "testRuntime": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
@@ -278,13 +214,9 @@
         }
     },
     "testRuntimeClasspath": {
-        "cglib:cglib-nodep": {
-            "locked": "3.2.7",
-            "requested": "3.2.7"
-        },
         "com.aries:docker-java-shaded": {
-            "locked": "3.0.14",
-            "requested": "3.0.14"
+            "locked": "3.1.0-rc-3",
+            "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
             "locked": "3.6.0",
