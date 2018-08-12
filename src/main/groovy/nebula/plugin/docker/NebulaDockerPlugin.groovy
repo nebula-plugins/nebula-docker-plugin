@@ -74,7 +74,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
             destFile = project.file(project.nebulaDocker.dockerFile)
             dependsOn project.tasks['nebulaDockerCopyDistResources']
             from "${project.nebulaDocker.dockerBase}"
-            maintainer project.nebulaDocker.maintainerEmail
+            label(["maintainer": "${project.nebulaDocker.maintainerEmail}"])
 
             addFile "${project.distTar.archiveName}", "/"
             runCommand "ln -s '${-> project.nebulaDocker.appDir}' '${project.nebulaDocker.appDirLatest}'"

@@ -20,7 +20,6 @@ import com.bmuschko.gradle.docker.tasks.image.Dockerfile
 import nebula.test.ProjectSpec
 import org.gradle.api.Task
 import org.gradle.api.tasks.Sync
-import spock.lang.Ignore
 
 /**
  * Unit test for {@link NebulaDockerPlugin}
@@ -209,7 +208,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         task.dependsOn.find { (it instanceof Task) && (it.name == 'nebulaDockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { (it instanceof Dockerfile.FromInstruction) && (it.build() == 'FROM base docker') }
-        task.instructions.find { (it instanceof Dockerfile.MaintainerInstruction) && (it.build() == 'MAINTAINER some email') }
+        task.instructions.find { (it instanceof Dockerfile.LabelInstruction) && (it.build() == 'LABEL maintainer="some email"') }
         task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar /") }
         task.instructions.find { (it instanceof Dockerfile.RunCommandInstruction) &&(it.build() == "RUN ln -s 'app directory' 'latest directory'") }
         task.instructions.find { (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]") }
@@ -243,7 +242,7 @@ class NebulaDockerPluginTest extends ProjectSpec {
         task.dependsOn.find { (it instanceof Task) && (it.name == 'nebulaDockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { (it instanceof Dockerfile.FromInstruction) && (it.build() == 'FROM base docker') }
-        task.instructions.find { (it instanceof Dockerfile.MaintainerInstruction) && (it.build() == 'MAINTAINER some email') }
+        task.instructions.find { (it instanceof Dockerfile.LabelInstruction) && (it.build() == 'LABEL maintainer="some email"') }
         task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar /") }
         task.instructions.find { (it instanceof Dockerfile.RunCommandInstruction) &&(it.build() == "RUN ln -s 'app directory' 'latest directory'") }
         task.instructions.find { (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]") }
