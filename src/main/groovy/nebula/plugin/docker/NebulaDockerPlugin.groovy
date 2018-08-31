@@ -57,7 +57,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
                 }
                 repository = repo
                 task.conventionMapping.tag = { taggingVersion }
-                println "Using version $taggingVersion"
+                logger.info "Using version $taggingVersion"
                 force = true
             }
 
