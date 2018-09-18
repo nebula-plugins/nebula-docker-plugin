@@ -37,7 +37,7 @@ class NebulaDockerPlugin implements Plugin<Project>, Strings, NebulaDockerSensib
         def capitalizedEnvir = lowerCaseCapitalize(envir)
 
         ["", "Latest"].each { tags ->
-            String dependTaskName = (!tags) ? "buildImage" : "pushImage${capitalizedEnvir}"
+            String dependTaskName = (nebulaDocker.tagWithoutPush || !tags) ? "buildImage" : "pushImage${capitalizedEnvir}"
             String taggingVersion = "latest"
             if (!tags) {
                 if (nebulaDocker.tagVersion) {

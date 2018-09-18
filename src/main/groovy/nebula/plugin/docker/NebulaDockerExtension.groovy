@@ -25,7 +25,7 @@ class NebulaDockerExtension {
     /**
      * Email address of the maintainer of the docker image.
      */
-    def String maintainerEmail
+    String maintainerEmail
 
     /**
      * Map of environment to docker repository.
@@ -36,23 +36,23 @@ class NebulaDockerExtension {
      *
      * @see #getEnvironments()
      */
-    def Map<String, String> dockerRepo
+    Map<String, String> dockerRepo
 
     /**
      * Docker daemon url.
      */
-    def String dockerUrl
+    String dockerUrl
 
     /**
      * Docker base image.
      */
-    def String dockerBase
+    String dockerBase
 
     /**
      * Where in the project build structure is the Dockerfile.
      * Typically this will be in <code>./build/docker/Dockerfile</code>, but if you handcrafted your own Dockerfile, specify the path here.
      */
-    def String dockerFile
+    String dockerFile
 
     /**
      * Name of the directory to be created in the docker image to host the app.
@@ -61,7 +61,7 @@ class NebulaDockerExtension {
      *
      * @see #appDirLatest
      */
-    def String appDir
+    String appDir
 
     /**
      * Name of the "latest" dir.
@@ -70,7 +70,7 @@ class NebulaDockerExtension {
      *
      * @see #appDir
      */
-    def String appDirLatest
+    String appDirLatest
 
     /**
      * Closure to execute when building the docker image.
@@ -79,7 +79,7 @@ class NebulaDockerExtension {
      * If you need any other files or symlinks or commands to be executed, specify them here.
      * If not set (or set to <code>null</code>) then no extra commands will be added to the Dockerfile.
      */
-    def Closure dockerImage
+    Closure dockerImage
 
     /**
      * Closure used to set the tag on the docker image.
@@ -87,28 +87,33 @@ class NebulaDockerExtension {
      * This closure allows you to define the tagging for the application version.
      * If not set, the application version will be set, as per above.
      */
-    def Closure<String> tagVersion
+    Closure<String> tagVersion
 
     /**
      * This is a simple flag to indicate whether or not to add registryCredentials to the underlying docker extension
      * for specifying user credentials (default is false)
      */
-    def boolean dockerRepoAuth
+    boolean dockerRepoAuth
 
     /**
      * The registry username (default is null)
      */
-    def String dockerRepoUsername
+    String dockerRepoUsername
 
     /**
      * The registry password (default is null)
      */
-    def String dockerRepoPassword
+    String dockerRepoPassword
 
     /**
      * The registry email address (default is null)
      */
-    def String dockerRepoEmail
+    String dockerRepoEmail
+
+    /**
+     * Do we only tag images (locally) or also push the tags to origin.
+     */
+    boolean tagWithoutPush
 
     /**
      * Defines a property which returns all the environments defined in the {@link #dockerRepo}.
@@ -133,6 +138,7 @@ class NebulaDockerExtension {
                 ", appDir='" + appDir + '\'' +
                 ", appDirLatest='" + appDirLatest + '\'' +
                 ", environments=" + getEnvironments() +
+                ", tagWithoutPush=" + tagWithoutPush +
                 '}';
     }
 }

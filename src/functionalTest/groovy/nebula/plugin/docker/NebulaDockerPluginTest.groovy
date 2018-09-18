@@ -183,6 +183,44 @@ class NebulaDockerPluginTest extends ProjectSpec {
         dpp.find({ it.name == 'pushImageDevenvLatest' })
     }
 
+    def "dockerTagImageLatest depends on buildImage if tagWithoutPush set"() {
+        def x = Spy(NebulaDockerPlugin)
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        project.configure(project) {
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.nebulaDocker.dockerRepo = [test: 'abc', PROD: 'xyz', 'devEnv': '123']
+        project.nebulaDocker.tagWithoutPush = true
+        project.tasks.create 'buildImage'
+
+        when:
+        x.createTasks project, "test"
+        def task = project.tasks['dockerTagImageTestLatest']
+
+        then:
+        def dpp = task.dependsOn.find({ it instanceof Task && it.name == "buildImage" })
+        dpp != null
+    }
+
+    def "dockerTagImageLatest depends on pushImageLatest if tagWithoutPush is notset"() {
+        def x = Spy(NebulaDockerPlugin)
+        project.extensions.create("nebulaDocker", NebulaDockerExtension)
+        project.configure(project) {
+            apply plugin: 'com.bmuschko.docker-java-application'
+        }
+        project.nebulaDocker.dockerRepo = [test: 'abc', PROD: 'xyz', 'devEnv': '123']
+        project.nebulaDocker.tagWithoutPush = false
+        project.tasks.create 'buildImage'
+
+        when:
+        x.createTasks project, "test"
+        def task = project.tasks['dockerTagImageTestLatest']
+
+        then:
+        def dpp = task.dependsOn.find({ it instanceof Task && it.name == "pushImageTest" })
+        dpp != null
+    }
+
     def "taskCreateDockerfile uses the property from NebulaDockerExtension and sets entry point and sets up right dependencies"() {
         def x = new NebulaDockerPlugin()
         project.extensions.create("nebulaDocker", NebulaDockerExtension)
@@ -208,10 +246,16 @@ class NebulaDockerPluginTest extends ProjectSpec {
         task.dependsOn.find { (it instanceof Task) && (it.name == 'nebulaDockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { (it instanceof Dockerfile.FromInstruction) && (it.build() == 'FROM base docker') }
-        task.instructions.find { (it instanceof Dockerfile.LabelInstruction) && (it.build() == 'LABEL maintainer="some email"') }
+        task.instructions.find {
+            (it instanceof Dockerfile.LabelInstruction) && (it.build() == 'LABEL maintainer="some email"')
+        }
         task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar /") }
-        task.instructions.find { (it instanceof Dockerfile.RunCommandInstruction) &&(it.build() == "RUN ln -s 'app directory' 'latest directory'") }
-        task.instructions.find { (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]") }
+        task.instructions.find {
+            (it instanceof Dockerfile.RunCommandInstruction) && (it.build() == "RUN ln -s 'app directory' 'latest directory'")
+        }
+        task.instructions.find {
+            (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]")
+        }
     }
 
     def "taskCreateDockerfile also invokes the dockerImage closure if set"() {
@@ -242,10 +286,16 @@ class NebulaDockerPluginTest extends ProjectSpec {
         task.dependsOn.find { (it instanceof Task) && (it.name == 'nebulaDockerCopyDistResources') }
         task.destFile.absolutePath.contains(project.nebulaDocker.dockerFile)
         task.instructions.find { (it instanceof Dockerfile.FromInstruction) && (it.build() == 'FROM base docker') }
-        task.instructions.find { (it instanceof Dockerfile.LabelInstruction) && (it.build() == 'LABEL maintainer="some email"') }
+        task.instructions.find {
+            (it instanceof Dockerfile.LabelInstruction) && (it.build() == 'LABEL maintainer="some email"')
+        }
         task.instructions.find { (it instanceof Dockerfile.FileInstruction) && (it.build() == "ADD xyz.tar /") }
-        task.instructions.find { (it instanceof Dockerfile.RunCommandInstruction) &&(it.build() == "RUN ln -s 'app directory' 'latest directory'") }
-        task.instructions.find { (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]") }
+        task.instructions.find {
+            (it instanceof Dockerfile.RunCommandInstruction) && (it.build() == "RUN ln -s 'app directory' 'latest directory'")
+        }
+        task.instructions.find {
+            (it instanceof Dockerfile.EntryPointInstruction) && (it.build() == "ENTRYPOINT [\"app directory/bin/xyz\"]")
+        }
         called == 1
     }
 
@@ -265,7 +315,6 @@ class NebulaDockerPluginTest extends ProjectSpec {
     }
 
     def "enabling repoAuth and setting the username password and email on docker.registryCredentials"() {
-
         def x = new NebulaDockerPlugin()
         x.apply(project)
         project.configure(project) {
@@ -298,7 +347,6 @@ class NebulaDockerPluginTest extends ProjectSpec {
     }
 
     def "when repoAuth is not explicitly enabled then docker.registryCredentials is not populated"() {
-
         def x = new NebulaDockerPlugin()
         x.apply(project)
         project.configure(project) {
