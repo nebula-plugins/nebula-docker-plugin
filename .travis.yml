@@ -1,5 +1,5 @@
 sudo: false
-jdk: oraclejdk8
+jdk: openjdk8
 before_install:
 - test $TRAVIS_PULL_REQUEST = false && openssl aes-256-cbc -K $encrypted_01f77e140031_key -iv $encrypted_01f77e140031_iv -in gradle.properties.enc -out gradle.properties -d || true
 install: true
