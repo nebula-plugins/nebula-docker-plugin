@@ -44,7 +44,7 @@ class NebulaDockerSensibleDefaultsTest extends Specification {
         ext.maintainerEmail == null //we don't change this
         ext.dockerUrl == x.DOCKER_URL_LOCALHOST
         ext.environments == ['test', 'prod'] as Set
-        ext.dockerRepo == [test: x.TITAN_TEST + "/$group/$appName", prod: x.TITAN_PROD + "/$group/$appName"]
+        ext.dockerRepo == [test: x.DOCKER_REG_TEST + "/$group/$appName", prod: x.DOCKER_REG_PROD + "/$group/$appName"]
         ext.dockerBase == x.DOCKER_BASE_OPEN_JRE
         ext.dockerFile == x.DEF_DOCKER_FILE
         ext.appDirLatest == "/${appName}-latest"
