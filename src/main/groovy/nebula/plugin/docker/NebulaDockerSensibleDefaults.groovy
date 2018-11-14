@@ -26,10 +26,10 @@ import org.gradle.api.Project
  */
 trait NebulaDockerSensibleDefaults {
     /* Default values here */
-    final String TITAN_TEST = "titan-registry.main.us-east-1.dyntest.netflix.net:7002"
-    final String TITAN_PROD = "titan-registry.main.us-east-1.dynprod.netflix.net:7002"
+    final String DOCKER_REG_TEST = "dockerregistry.test.netflix.net:7002"
+    final String DOCKER_REG_PROD = "dockerregistry.test.netflix.net:7002"
     final String DOCKER_URL_LOCALHOST = "http://localhost:4243"
-    final String DOCKER_BASE_OPEN_JRE = "java:openjdk-8-jre"
+    final String DOCKER_BASE_OPEN_JRE = "dockerregistry.test.netflix.net:7002/engtools/nflx-java8:latest"
     final String DEF_DOCKER_FILE = "./build/docker/app-lib/Dockerfile"
 
     /**
@@ -54,7 +54,7 @@ trait NebulaDockerSensibleDefaults {
 
         if (!nebulaDockerExtension.dockerRepo) {
             def groupAppName = "${project.group}/${project.applicationName}"
-            nebulaDockerExtension.dockerRepo = [test: TITAN_TEST + "/$groupAppName", prod: TITAN_PROD + "/$groupAppName"]
+            nebulaDockerExtension.dockerRepo = [test: DOCKER_REG_TEST + "/$groupAppName", prod: DOCKER_REG_PROD + "/$groupAppName"]
         }
 
         if (!nebulaDockerExtension.appDirLatest) {
