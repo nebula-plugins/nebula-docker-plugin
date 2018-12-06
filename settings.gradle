@@ -17,5 +17,4 @@
 
 rootProject.name = 'nebula-docker-plugin'
 
-enableFeaturePreview('STABLE_PUBLISHING')
 
