@@ -5,7 +5,7 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         }
     },
@@ -15,7 +15,7 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         }
     },
@@ -25,7 +25,7 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         }
     },
@@ -35,11 +35,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -49,11 +49,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -63,11 +63,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -77,11 +77,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -91,11 +91,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -105,11 +105,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -119,11 +119,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -133,22 +133,22 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
     "jacocoAgent": {
         "org.jacoco:org.jacoco.agent": {
-            "locked": "0.8.1"
+            "locked": "0.8.2"
         }
     },
     "jacocoAnt": {
         "org.jacoco:org.jacoco.ant": {
-            "locked": "0.8.1"
+            "locked": "0.8.2"
         }
     },
     "runtime": {
@@ -157,7 +157,7 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         }
     },
@@ -167,7 +167,7 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         }
     },
@@ -177,11 +177,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -191,11 +191,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -205,11 +205,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     },
@@ -219,11 +219,11 @@
             "requested": "3.1.0-rc-3"
         },
         "com.bmuschko:gradle-docker-plugin": {
-            "locked": "3.6.0",
+            "locked": "3.6.2",
             "requested": "3.+"
         },
         "com.netflix.nebula:nebula-test": {
-            "locked": "7.1.0",
+            "locked": "7.1.4",
             "requested": "7.+"
         }
     }
