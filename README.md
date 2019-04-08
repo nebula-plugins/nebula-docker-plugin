@@ -1,4 +1,4 @@
-# Nebula Docker Plugin
+# Nebula Docker Plugin (Deprecated)
 
 ![Support Status](https://img.shields.io/badge/nebula-supported-brightgreen.svg)
 [![Build Status](https://travis-ci.org/nebula-plugins/nebula-docker-plugin.svg?branch=master)](https://travis-ci.org/nebula-plugins/nebula-docker-plugin)
