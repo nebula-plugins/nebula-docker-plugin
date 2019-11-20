@@ -28,7 +28,7 @@ trait NebulaDockerSensibleDefaults {
     /* Default values here */
     final String DOCKER_REG_TEST = "dockerregistry.test.netflix.net:7002"
     final String DOCKER_REG_PROD = "dockerregistry.test.netflix.net:7002"
-    final String DOCKER_URL_LOCALHOST = "http://localhost:4243"
+    final String DOCKER_URL_LOCALHOST = "unix:///var/run/docker.sock"
     final String DOCKER_BASE_OPEN_JRE = "dockerregistry.test.netflix.net:7002/engtools/nflx-java8:latest"
     final String DEF_DOCKER_FILE = "./build/docker/app-lib/Dockerfile"
 
